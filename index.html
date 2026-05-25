@@ -443,13 +443,13 @@ footer span { color: var(--gold); }
   <!-- SETTINGS TAB -->
   <div id="tab-settings" class="tab-content">
     <div class="model-info-box">
-      <strong>⚡ Active Free Models (OpenRouter 2025/2026)</strong><br>
-      🔍 Trend: <strong>google/gemini-2.5-flash-preview-05-20:free</strong><br>
-      💰 Profit: <strong>deepseek/deepseek-chat-v3-0324:free</strong> (DeepSeek V3 — fast, reliable JSON)<br>
+      <strong>⚡ Active Free Models (OpenRouter — verified May 2026)</strong><br>
+      🔍 Trend: <strong>google/gemini-2.5-flash-lite</strong> (ultra-fast, low cost, no :free suffix)<br>
+      💰 Profit: <strong>deepseek/deepseek-chat-v3-0324:free</strong> (V3 — fast, reliable JSON)<br>
       🛡 Risk: <strong>mistralai/mistral-7b-instruct:free</strong><br>
       🎵 TikTok: <strong>meta-llama/llama-4-maverick:free</strong><br>
       🎌 Anime: <strong>qwen/qwen3-235b-a22b:free</strong><br>
-      All models use the <code>:free</code> suffix required by OpenRouter's current API.
+      Note: Gemini 2.5 Flash Lite does not need a :free suffix — it routes via Google AI Studio.
     </div>
     <div class="card">
       <div class="card-title">⚙ API Configuration</div>
@@ -478,7 +478,7 @@ footer span { color: var(--gold); }
     <div class="card">
       <div class="card-title">📋 Free AI Models (OpenRouter) — Updated May 2026</div>
       <div style="display:grid;gap:8px;">
-        <div class="agent-item done"><div class="agent-icon">🟢</div><div style="flex:1"><div class="agent-name">google/gemini-2.5-flash-preview-05-20:free</div><div class="agent-role">Trend Detection · Web Search · Judging</div></div></div>
+        <div class="agent-item done"><div class="agent-icon">🟢</div><div style="flex:1"><div class="agent-name">google/gemini-2.5-flash-lite</div><div class="agent-role">Trend Detection · Web Search · Judging</div></div></div>
         <div class="agent-item done"><div class="agent-icon">🟢</div><div style="flex:1"><div class="agent-name">deepseek/deepseek-chat-v3-0324:free</div><div class="agent-role">Profit Math · Fear Mapping · Pricing Logic (replaces R1 for JSON tasks)</div></div></div>
         <div class="agent-item done"><div class="agent-icon">🟢</div><div style="flex:1"><div class="agent-name">meta-llama/llama-4-maverick:free</div><div class="agent-role">TikTok Copy · Buying Triggers · Supplier</div></div></div>
         <div class="agent-item done"><div class="agent-icon">🟢</div><div style="flex:1"><div class="agent-name">qwen/qwen3-235b-a22b:free</div><div class="agent-role">Anime Culture · Asian Market · Pinterest</div></div></div>
@@ -510,12 +510,18 @@ const STATE = {
 // UPDATED MODEL MAP — all :free suffix, DeepSeek V3 for JSON
 // ============================================================
 const MODEL_MAP = {
-  'gemini':   'google/gemini-2.5-flash-preview-05-20:free',
-  'deepseek': 'deepseek/deepseek-chat-v3-0324:free',   // V3 for JSON tasks (not R1)
-  'deepseek-r1': 'deepseek/deepseek-r1:free',          // R1 only when reasoning needed
-  'llama':    'meta-llama/llama-4-maverick:free',
-  'qwen':     'qwen/qwen3-235b-a22b:free',
-  'mistral':  'mistralai/mistral-7b-instruct:free'
+  // Verified working model IDs on OpenRouter (May 2026)
+  // Gemini 2.5 Flash Lite — fast, cheap, no :free suffix needed
+  'gemini':      'google/gemini-2.5-flash-lite',
+  // DeepSeek V3 — best for structured JSON output, NOT R1 (R1 emits <think> tags)
+  'deepseek':    'deepseek/deepseek-chat-v3-0324:free',
+  'deepseek-r1': 'deepseek/deepseek-r1:free',
+  // Llama 4 Maverick — best free Llama for creative copy
+  'llama':       'meta-llama/llama-4-maverick:free',
+  // Qwen3 235B — best for anime/cultural context
+  'qwen':        'qwen/qwen3-235b-a22b:free',
+  // Mistral 7B with :free suffix
+  'mistral':     'mistralai/mistral-7b-instruct:free'
 };
 
 // ============================================================
