@@ -1301,7 +1301,7 @@ function setMainStatus(status, text) {
 }
 
 // ============================================================
-// AI CALL
+// AI CALL — FIXED MODEL ID
 // ============================================================
 async function callAI(model, systemPrompt, userPrompt, label) {
   const config = getConfig();
@@ -1312,7 +1312,7 @@ async function callAI(model, systemPrompt, userPrompt, label) {
   log(`Calling ${label}...`, 'info');
 
   const modelMap = {
-    'gemini': 'google/gemini-2.5-flash-preview-05-20',
+    'gemini': 'google/gemini-2.5-flash-preview',  // FIXED: removed -05-20
     'deepseek': 'deepseek/deepseek-r1',
     'llama': 'meta-llama/llama-3.3-70b-instruct',
     'qwen': 'qwen/qwen-2.5-72b-instruct',
@@ -1361,7 +1361,6 @@ function scoreProducts(products) {
     const weights = { emotion: 0.25, profit: 0.30, viral: 0.25, identity: 0.15, risk: 0.05 };
     const scores = p.scores || { emotion: 7, profit: 7, viral: 7, identity: 7, risk: 3 };
 
-    // Auto-reject rules
     if (scores.profit < 5) { p.rejected = 'Profit too low'; return p; }
     if (scores.risk > 8) { p.rejected = 'Risk too high'; return p; }
 
@@ -1406,7 +1405,6 @@ async function runScout(config) {
 
   const today = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
 
-  // AI 1: Gemini — Trend
   setAgentStep('step-scout-trend', 'running');
   const trendResult = await callAI('gemini',
     `You are an elite TikTok and Pinterest viral trend analyst specializing in baby and anime products. 
@@ -1442,7 +1440,6 @@ async function runScout(config) {
   setAgentStep('step-scout-trend', 'done');
   await sleep(1000);
 
-  // AI 2: DeepSeek — Profit
   setAgentStep('step-scout-profit', 'running');
   const profitResult = await callAI('deepseek',
     `You are a dropshipping profit calculation expert. Pure math, no assumptions. 
@@ -1474,7 +1471,6 @@ async function runScout(config) {
   setAgentStep('step-scout-profit', 'done');
   await sleep(1000);
 
-  // AI 3: Mistral — Risk
   setAgentStep('step-scout-risk', 'running');
   const riskResult = await callAI('mistral',
     `You are an e-commerce legal and platform compliance expert. 
@@ -1527,7 +1523,6 @@ TRENDS: ${scoutData.trendResult}
 PROFITS: ${scoutData.profitResult}
 RISKS: ${scoutData.riskResult}`;
 
-  // 5 AI debate in parallel
   const debatePromises = [
     callAI('gemini',
       `You are Gemini, the Viral Intelligence Agent for ${config.brand}. 
@@ -1586,7 +1581,6 @@ RISKS: ${scoutData.riskResult}`;
     }
   });
 
-  // JS SCORING — Final Authority
   log('JS Scoring Engine calculating...', 'gold');
 
   const candidateMap = {};
@@ -1604,7 +1598,6 @@ RISKS: ${scoutData.riskResult}`;
     });
   });
 
-  // Average scores and calculate final
   const candidates = Object.values(candidateMap).map(c => {
     Object.keys(weights).forEach(k => { c.scores[k] = Math.round(c.scores[k] / c.voteCount); });
     c.finalScore = (
@@ -1649,7 +1642,6 @@ ALWAYS SAY: origin story, generation, legacy, chapter begins, anime born
 Emotion triggers to use: PRIDE, NOSTALGIA, BELONGING, LEGACY
 `;
 
-  // CALL 1: Psychology + Customer Profile
   setAgentStep('step-psychology', 'running');
   const psychResult = await callAI('deepseek',
     `You are an elite consumer psychology expert for ${config.brand}. 
@@ -1672,7 +1664,6 @@ Emotion triggers to use: PRIDE, NOSTALGIA, BELONGING, LEGACY
   setAgentStep('step-psychology', 'done');
   await sleep(800);
 
-  // CALL 2: Copy + Pricing
   setAgentStep('step-copy', 'running');
   const copyResult = await callAI('llama',
     `You are an elite copywriter for ${config.brand} — an anime identity brand, not a baby clothes shop.
@@ -1727,7 +1718,6 @@ Emotion triggers to use: PRIDE, NOSTALGIA, BELONGING, LEGACY
   setAgentStep('step-copy', 'done');
   await sleep(800);
 
-  // CALL 3: Design + Image
   setAgentStep('step-design', 'running');
   const designResult = await callAI('qwen',
     `You are an elite product design director for ${config.brand}.
@@ -1750,7 +1740,6 @@ Emotion triggers to use: PRIDE, NOSTALGIA, BELONGING, LEGACY
   setAgentStep('step-design', 'done');
   await sleep(800);
 
-  // CALL 4: Competitor + Trend
   setAgentStep('step-competitor', 'running');
   const competitorResult = await callAI('gemini',
     `You are a competitive intelligence and trend prediction expert for ${config.brand}.
@@ -1783,12 +1772,11 @@ Emotion triggers to use: PRIDE, NOSTALGIA, BELONGING, LEGACY
 }
 
 // ============================================================
-// IMAGE GENERATION (Pollinations)
+// IMAGE GENERATION
 // ============================================================
 async function generateImages(winnerName, designResult) {
   log('Generating product mockup images...', 'gold');
 
-  // Extract prompt from design result
   const promptMatch = designResult.match(/POLLINATIONS PROMPT[:\s]+"?([^"\n]+)/i);
   const basePrompt = promptMatch ? promptMatch[1] :
     `${winnerName}, cinematic product photography, navy background, gold accent light, cream foreground, anime-inspired minimal aesthetic, Rembrandt lighting, premium emotional storytelling, 35mm lens depth of field, no text no watermark`;
@@ -1797,15 +1785,14 @@ async function generateImages(winnerName, designResult) {
   const seed = 1024;
 
   const images = [
-    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=1024&seed=${seed}&enhance=true&nologo=true`, label: '1:1 Instagram', ratio: '1024x1024' },
-    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=576&height=1024&seed=${seed}&enhance=true&nologo=true`, label: '9:16 TikTok', ratio: '576x1024' },
-    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=576&seed=${seed}&enhance=true&nologo=true`, label: '16:9 Banner', ratio: '1024x576' }
+    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=1024&seed=${seed}&enhance=true&nologo=true`, label: '1:1 Instagram' },
+    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=576&height=1024&seed=${seed}&enhance=true&nologo=true`, label: '9:16 TikTok' },
+    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=576&seed=${seed}&enhance=true&nologo=true`, label: '16:9 Banner' }
   ];
 
-  // Update image grid
   const grid = document.getElementById('imageGrid');
   grid.innerHTML = '';
-  images.forEach((img, i) => {
+  images.forEach((img) => {
     const card = document.createElement('div');
     card.className = 'image-card';
     card.innerHTML = `
@@ -1831,7 +1818,6 @@ async function saveToSheets(config, winner, outputs) {
 
   try {
     log('Saving to Google Sheets...', 'info');
-
     const imageUrl = STATE.results.imageUrl || '';
     const today = new Date().toLocaleDateString();
 
@@ -1876,7 +1862,7 @@ async function saveToSheets(config, winner, outputs) {
 }
 
 // ============================================================
-// TELEGRAM NOTIFY
+// TELEGRAM
 // ============================================================
 async function sendTelegram(config, winner, imageUrl) {
   if (!config.telegramToken || !config.chatId) {
@@ -1896,7 +1882,6 @@ async function sendTelegram(config, winner, imageUrl) {
       `"We don't sell baby products. We sell origin stories."\n\n` +
       `📅 ${new Date().toLocaleString()}`;
 
-    // Send photo with URL
     const url = `https://api.telegram.org/bot${config.telegramToken}/sendPhoto`;
     const payload = {
       chat_id: config.chatId,
@@ -1931,7 +1916,6 @@ async function sendTelegram(config, winner, imageUrl) {
 // DISPLAY RESULTS
 // ============================================================
 function displayResults(winner, outputs) {
-  // Show results content
   document.getElementById('resultsEmpty').style.display = 'none';
   document.getElementById('resultsContent').style.display = 'block';
   document.getElementById('copyEmpty').style.display = 'none';
@@ -1939,7 +1923,6 @@ function displayResults(winner, outputs) {
   document.getElementById('imagesEmpty').style.display = 'none';
   document.getElementById('imagesContent').style.display = 'block';
 
-  // Scores
   const s = winner?.scores || {};
   document.getElementById('scoreEmotion').textContent = s.emotion || '-';
   document.getElementById('scoreProfit').textContent = s.profit || '-';
@@ -1947,7 +1930,6 @@ function displayResults(winner, outputs) {
   document.getElementById('scoreIdentity').textContent = s.identity || '-';
   document.getElementById('scoreFinal').textContent = winner?.finalScore || '-';
 
-  // Product cards
   const grid = document.getElementById('productGrid');
   const product = {
     name: winner?.name || 'Winner Product',
@@ -1972,9 +1954,7 @@ function displayResults(winner, outputs) {
     </div>
   `;
 
-  // Copy outputs - parse from copyResult
   const copyText = outputs.copyResult || '';
-
   const extractSection = (text, start, end) => {
     const s = text.indexOf(start);
     const e = end ? text.indexOf(end, s) : text.length;
@@ -1987,21 +1967,15 @@ function displayResults(winner, outputs) {
   document.getElementById('pinterestCopy').textContent = extractSection(copyText, '=== PINTEREST ===', '=== EMAIL ===') || copyText;
   document.getElementById('emailCopy').textContent = extractSection(copyText, '=== EMAIL ===', '=== PRICING ===') || copyText;
 
-  // Psychology
   document.getElementById('customerText').textContent = outputs.psychResult || '-';
   document.getElementById('customerOutput').classList.add('open');
-
-  // Competitor
   document.getElementById('competitorText').textContent = outputs.competitorResult || '-';
 
-  // Pricing
   const pricingText = extractSection(copyText, '=== PRICING ===', '');
   document.getElementById('pricingText').textContent = pricingText || 'See Shopify section for pricing details.';
 
-  // Design
   document.getElementById('designConcept').textContent = outputs.designResult?.slice(0, 600) || '-';
 
-  // Leonardo prompt
   const leonardoMatch = (outputs.designResult || '').match(/LEONARDO AI PROMPT[:\s]+(.+?)(?:\n\n|\n6\.|$)/is);
   document.getElementById('leonardoPrompt').textContent = leonardoMatch ? leonardoMatch[1].trim() : 'See design concept above for prompt.';
 }
@@ -2031,7 +2005,6 @@ async function startAgent() {
   setMainStatus('running', 'AGENT RUNNING');
   updateProgress(2);
 
-  // Reset UI
   ['step-scout-trend','step-scout-profit','step-scout-risk','step-debate',
    'step-psychology','step-copy','step-design','step-competitor','step-save']
     .forEach(id => setAgentStep(id, ''));
@@ -2049,34 +2022,28 @@ async function startAgent() {
   log(`Brand: ${config.brand} | Niche: ${config.niche} | Market: ${config.market}`, 'info');
 
   try {
-    // LAYER 1
     const scoutData = await runScout(config);
     await sleep(500);
 
-    // LAYER 2
     const debateData = await runDebate(config, scoutData);
     const winner = debateData.winner;
     STATE.results.winner = winner;
     await sleep(500);
 
-    // LAYER 3
     const outputs = await runExecute(config, winner, scoutData);
     STATE.results.outputs = outputs;
 
-    // IMAGES
     updateProgress(87);
     const imageUrl = await generateImages(winner?.name || 'Product', outputs.designResult);
     STATE.results.imageUrl = imageUrl;
     updateProgress(90);
 
-    // SAVE
     setAgentStep('step-save', 'running');
     await saveToSheets(config, winner, outputs);
     await sleep(500);
     await sendTelegram(config, winner, imageUrl);
     setAgentStep('step-save', 'done');
 
-    // DISPLAY
     displayResults(winner, outputs);
 
     updateProgress(100);
