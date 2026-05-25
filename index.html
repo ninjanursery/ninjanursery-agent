@@ -1312,8 +1312,8 @@ async function callAI(model, systemPrompt, userPrompt, label, retries = 3) {
   const modelMap = {
     'gemini': 'google/gemini-2.5-flash',
     'deepseek': 'deepseek/deepseek-chat',
-    'llama': 'deepseek/deepseek-v4-flash:free',
-    'qwen': 'qwen/qwen3-coder:free',
+    'llama': 'deepseek/deepseek-chat',
+    'qwen': 'nvidia/nemotron-3-super-120b-a12b:free',
     'mistral': 'nvidia/nemotron-3-super-120b-a12b:free'
   };
 
@@ -1793,7 +1793,7 @@ Emotion triggers to use: PRIDE, NOSTALGIA, BELONGING, LEGACY
 async function generateImages(winnerName, designResult) {
   log('Generating product mockup images...', 'gold');
 
-  const promptMatch = designResult.match(/POLLINATIONS PROMPT[:\s]+"?([^"\n]+)/i);
+  const promptMatch = (designResult || '').match(/POLLINATIONS PROMPT[:\s]+"?([^"\n]+)/i);
   const basePrompt = promptMatch ? promptMatch[1] :
     `${winnerName}, cinematic product photography, navy background, gold accent light, cream foreground, anime-inspired minimal aesthetic, Rembrandt lighting, premium emotional storytelling, 35mm lens depth of field, no text no watermark`;
 
