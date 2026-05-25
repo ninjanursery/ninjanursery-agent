@@ -1100,4 +1100,1034 @@ footer span { color: var(--gold); }
       <div class="settings-grid">
         <div class="input-group">
           <label>Brand Name</label>
-      
+          <input type="text" id="settingBrand" placeholder="NinjaNursery™" />
+        </div>
+        <div class="input-group">
+          <label>Niche Keywords</label>
+          <input type="text" id="settingNiche" placeholder="anime baby lifestyle dropshipping" />
+        </div>
+        <div class="input-group">
+          <label>Target Market</label>
+          <input type="text" id="settingMarket" placeholder="USA, UK, Canada" />
+        </div>
+        <div class="input-group">
+          <label>Min Profit Margin %</label>
+          <input type="number" id="settingMinMargin" placeholder="60" min="0" max="100" />
+        </div>
+      </div>
+      <button class="btn btn-gold" style="margin-top:8px" onclick="saveBrandSettings()">💾 Save Brand Config</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Free AI Models (OpenRouter)</div>
+      <div style="display:grid; gap:8px;">
+        <div class="agent-item done">
+          <div class="agent-icon">🟢</div>
+          <div style="flex:1">
+            <div class="agent-name">google/gemini-2.5-flash-preview</div>
+            <div class="agent-role">Trend Detection · Web Search · Judging</div>
+          </div>
+        </div>
+        <div class="agent-item done">
+          <div class="agent-icon">🟢</div>
+          <div style="flex:1">
+            <div class="agent-name">deepseek/deepseek-r1</div>
+            <div class="agent-role">Profit Math · Fear Mapping · Pricing Logic</div>
+          </div>
+        </div>
+        <div class="agent-item done">
+          <div class="agent-icon">🟢</div>
+          <div style="flex:1">
+            <div class="agent-name">meta-llama/llama-3.3-70b-instruct</div>
+            <div class="agent-role">TikTok Copy · Buying Triggers · Supplier</div>
+          </div>
+        </div>
+        <div class="agent-item done">
+          <div class="agent-icon">🟢</div>
+          <div style="flex:1">
+            <div class="agent-name">qwen/qwen-2.5-72b-instruct</div>
+            <div class="agent-role">Anime Culture · Asian Market · Pinterest</div>
+          </div>
+        </div>
+        <div class="agent-item done">
+          <div class="agent-icon">🟢</div>
+          <div style="flex:1">
+            <div class="agent-name">mistralai/mistral-7b-instruct</div>
+            <div class="agent-role">Risk Screen · Platform Behavior · Competitor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notification" id="notification"></div>
+
+<!-- FOOTER -->
+<footer>
+  <span>NinjaNursery™</span> Agent V2.0 · AI Commerce OS · 
+  "We don't sell baby products. We sell <span>origin stories</span>."
+</footer>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const STATE = {
+  isRunning: false,
+  callCount: 0,
+  results: {},
+  currentPlatform: 'shopify'
+};
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function saveSettings() {
+  const keys = ['settingOpenRouter','settingSheetId','settingTelegramToken','settingChatId'];
+  keys.forEach(k => {
+    const val = document.getElementById(k).value.trim();
+    if (val) localStorage.setItem(k, val);
+  });
+  showNotification('Settings saved to localStorage ✓', 'success');
+}
+
+function saveBrandSettings() {
+  ['settingBrand','settingNiche','settingMarket','settingMinMargin'].forEach(k => {
+    const val = document.getElementById(k).value.trim();
+    if (val) localStorage.setItem(k, val);
+  });
+  showNotification('Brand config saved ✓', 'success');
+}
+
+function loadSettings() {
+  const fields = ['settingOpenRouter','settingSheetId','settingTelegramToken',
+                  'settingChatId','settingBrand','settingNiche','settingMarket','settingMinMargin'];
+  fields.forEach(k => {
+    const val = localStorage.getItem(k);
+    if (val) document.getElementById(k).value = val;
+  });
+}
+
+function clearSettings() {
+  if (!confirm('Clear all saved settings?')) return;
+  localStorage.clear();
+  loadSettings();
+  showNotification('Settings cleared', 'info');
+}
+
+function getConfig() {
+  return {
+    openrouterKey: localStorage.getItem('settingOpenRouter') || '',
+    sheetId: localStorage.getItem('settingSheetId') || '',
+    telegramToken: localStorage.getItem('settingTelegramToken') || '',
+    chatId: localStorage.getItem('settingChatId') || '',
+    brand: localStorage.getItem('settingBrand') || 'NinjaNursery™',
+    niche: localStorage.getItem('settingNiche') || 'anime baby lifestyle dropshipping',
+    market: localStorage.getItem('settingMarket') || 'USA',
+    minMargin: parseInt(localStorage.getItem('settingMinMargin') || '60')
+  };
+}
+
+// ============================================================
+// UI HELPERS
+// ============================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function switchPlatform(p) {
+  STATE.currentPlatform = p;
+  document.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.platform-content').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('platform-' + p).classList.add('active');
+}
+
+function toggleOutput(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+function showNotification(msg, type = 'info') {
+  const n = document.getElementById('notification');
+  n.textContent = msg;
+  n.className = 'notification ' + type + ' show';
+  setTimeout(() => n.classList.remove('show'), 3500);
+}
+
+function log(msg, type = 'info') {
+  const container = document.getElementById('logContainer');
+  const now = new Date().toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const entry = document.createElement('div');
+  entry.className = 'log-entry';
+  entry.innerHTML = `<span class="log-time">${now}</span><span class="log-msg ${type}">${msg}</span>`;
+  container.appendChild(entry);
+  container.scrollTop = container.scrollHeight;
+}
+
+function setAgentStep(id, status) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'agent-item ' + status;
+}
+
+function setLayerStatus(layer, status, text) {
+  const card = document.getElementById('layer' + layer + 'Card');
+  const statusEl = document.getElementById('layer' + layer + 'Status');
+  card.className = 'layer-card ' + status;
+  if (text) statusEl.textContent = text;
+}
+
+function updateProgress(pct) {
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function updateCallCount(n) {
+  STATE.callCount = n;
+  document.getElementById('callCount').textContent = n;
+}
+
+function setMainStatus(status, text) {
+  const dot = document.getElementById('mainStatusDot');
+  const txt = document.getElementById('mainStatusText');
+  dot.className = 'status-dot-main ' + status;
+  txt.textContent = text;
+  txt.style.color = status === 'running' ? 'var(--gold)' : status === 'done' ? 'var(--success)' : status === 'error' ? 'var(--error)' : 'var(--text-muted)';
+}
+
+// ============================================================
+// AI CALL — FIXED MODEL ID
+// ============================================================
+async function callAI(model, systemPrompt, userPrompt, label) {
+  const config = getConfig();
+  if (!config.openrouterKey) {
+    throw new Error('OpenRouter API Key missing. Go to Settings.');
+  }
+
+  log(`Calling ${label}...`, 'info');
+
+  const modelMap = {
+    'gemini': 'google/gemini-2.5-flash',  // FIXED: removed -05-20
+    'deepseek': 'deepseek/deepseek-r1',
+    'llama': 'meta-llama/llama-3.3-70b-instruct',
+    'qwen': 'qwen/qwen-2.5-72b-instruct',
+    'mistral': 'mistralai/mistral-7b-instruct'
+  };
+
+  const modelId = modelMap[model] || model;
+
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${config.openrouterKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://ninjanursery.com',
+      'X-Title': 'NinjaNursery Agent V2.0'
+    },
+    body: JSON.stringify({
+      model: modelId,
+      max_tokens: 1500,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ]
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`API Error (${response.status}): ${err}`);
+  }
+
+  const data = await response.json();
+  updateCallCount(STATE.callCount + 1);
+  const text = data.choices?.[0]?.message?.content || '';
+  log(`✓ ${label} responded (${text.length} chars)`, 'success');
+  return text;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ============================================================
+// JS SCORING ENGINE
+// ============================================================
+function scoreProducts(products) {
+  return products.map(p => {
+    const weights = { emotion: 0.25, profit: 0.30, viral: 0.25, identity: 0.15, risk: 0.05 };
+    const scores = p.scores || { emotion: 7, profit: 7, viral: 7, identity: 7, risk: 3 };
+
+    if (scores.profit < 5) { p.rejected = 'Profit too low'; return p; }
+    if (scores.risk > 8) { p.rejected = 'Risk too high'; return p; }
+
+    p.finalScore = (
+      (scores.emotion * weights.emotion) +
+      (scores.profit * weights.profit) +
+      (scores.viral * weights.viral) +
+      (scores.identity * weights.identity) +
+      ((10 - scores.risk) * weights.risk)
+    );
+    return p;
+  }).sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+}
+
+// ============================================================
+// PARSE JSON SAFE
+// ============================================================
+function parseJSON(text) {
+  try {
+    const clean = text.replace(/```json/g,'').replace(/```/g,'').trim();
+    const start = clean.indexOf('{');
+    const end = clean.lastIndexOf('}');
+    if (start !== -1 && end !== -1) {
+      return JSON.parse(clean.slice(start, end+1));
+    }
+    const arrStart = clean.indexOf('[');
+    const arrEnd = clean.lastIndexOf(']');
+    if (arrStart !== -1 && arrEnd !== -1) {
+      return JSON.parse(clean.slice(arrStart, arrEnd+1));
+    }
+  } catch(e) {}
+  return null;
+}
+
+// ============================================================
+// LAYER 1: SCOUT
+// ============================================================
+async function runScout(config) {
+  log('═══ LAYER 1: SCOUT ═══', 'gold');
+  setLayerStatus(1, 'active', 'Running...');
+  updateProgress(5);
+
+  const today = new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'});
+
+  setAgentStep('step-scout-trend', 'running');
+  const trendResult = await callAI('gemini',
+    `You are an elite TikTok and Pinterest viral trend analyst specializing in baby and anime products. 
+    Brand context: ${config.brand} — "We sell origin stories, not products." 
+    Niche: ${config.niche}. Target market: ${config.market}.
+    IMPORTANT LANGUAGE RULES - NEVER SAY: cute, buy now, discount, limited offer, baby product.
+    ALWAYS USE: origin story, generation, legacy, chapter begins, anime born.
+    Respond ONLY in valid JSON format.`,
+    `Today is ${today}. Find 5 trending ${config.niche} products right now on TikTok and Pinterest.
+    Each product must have 60%+ profit potential and be sourceable from AliExpress.
+    
+    Respond with this exact JSON:
+    {
+      "products": [
+        {
+          "name": "product name",
+          "viral_trigger": "why it will go viral NOW",
+          "emotional_hook": "which emotion triggers purchase (pride/nostalgia/belonging/legacy)",
+          "anime_connection": "how this connects to anime identity",
+          "estimated_selling_price": 29.99,
+          "estimated_cogs": 8.00,
+          "aliexpress_search": "search keywords to find on AliExpress",
+          "scores": {
+            "emotion": 8,
+            "viral": 9,
+            "identity": 7
+          }
+        }
+      ]
+    }`,
+    'Gemini — Trend Detector'
+  );
+  setAgentStep('step-scout-trend', 'done');
+  await sleep(1000);
+
+  setAgentStep('step-scout-profit', 'running');
+  const profitResult = await callAI('deepseek',
+    `You are a dropshipping profit calculation expert. Pure math, no assumptions. 
+    Always protect minimum ${config.minMargin}% net margin.
+    Respond ONLY in valid JSON format.`,
+    `Analyze these products and calculate exact profit margins:
+    ${trendResult}
+    
+    For each product, calculate:
+    - Net profit = selling_price - cogs - shipping($4) - shopify_fee(2.9%+0.30) - estimated_CAC($18)
+    - Net margin % = (net_profit / selling_price) * 100
+    - Keep only products with margin >= ${config.minMargin}%
+    
+    Respond with JSON:
+    {
+      "profitable_products": [
+        {
+          "name": "product name",
+          "selling_price": 29.99,
+          "cogs": 8.00,
+          "net_profit": 15.50,
+          "margin_pct": 52,
+          "profit_score": 8
+        }
+      ]
+    }`,
+    'DeepSeek R1 — Profit Calculator'
+  );
+  setAgentStep('step-scout-profit', 'done');
+  await sleep(1000);
+
+  setAgentStep('step-scout-risk', 'running');
+  const riskResult = await callAI('mistral',
+    `You are an e-commerce legal and platform compliance expert. 
+    Assess copyright, trademark, Shopify policy, TikTok ad policy, and baby safety risks.
+    Respond ONLY in valid JSON format.`,
+    `Screen these products for risks:
+    ${trendResult}
+    
+    For each product assess:
+    - copyright_risk: any IP issues?
+    - platform_risk: Shopify/TikTok policy problems?
+    - safety_risk: baby safety concerns?
+    - overall_risk_score: 1-10 (10 = very risky)
+    
+    Respond with JSON:
+    {
+      "risk_assessments": [
+        {
+          "name": "product name",
+          "copyright_risk": "LOW/MEDIUM/HIGH",
+          "platform_risk": "LOW/MEDIUM/HIGH", 
+          "safety_risk": "LOW/MEDIUM/HIGH",
+          "risk_score": 2,
+          "notes": "brief notes"
+        }
+      ]
+    }`,
+    'Mistral — Risk Screener'
+  );
+  setAgentStep('step-scout-risk', 'done');
+
+  setLayerStatus(1, 'done', '✓ Complete');
+  updateProgress(25);
+  log('Layer 1 Scout complete', 'success');
+
+  return { trendResult, profitResult, riskResult };
+}
+
+// ============================================================
+// LAYER 2: DEBATE
+// ============================================================
+async function runDebate(config, scoutData) {
+  log('═══ LAYER 2: DEBATE ═══', 'gold');
+  setLayerStatus(2, 'active', 'Running...');
+  setAgentStep('step-debate', 'running');
+  updateProgress(30);
+
+  const context = `Scout findings:
+TRENDS: ${scoutData.trendResult}
+PROFITS: ${scoutData.profitResult}
+RISKS: ${scoutData.riskResult}`;
+
+  const debatePromises = [
+    callAI('gemini',
+      `You are Gemini, the Viral Intelligence Agent for ${config.brand}. 
+      You fight for the product with highest viral + emotional potential.
+      Brand truth: "We sell origin stories." Anime emotion drives purchases.
+      Respond in JSON only.`,
+      `${context}
+      Which ONE product should win? Score it 1-10 for: emotion, profit, viral, identity, risk.
+      JSON: {"champion": "product name", "scores": {"emotion":8,"profit":7,"viral":9,"identity":8,"risk":2}, "argument": "why this wins"}`,
+      'Gemini — Viral Champion'
+    ),
+    callAI('deepseek',
+      `You are DeepSeek, the Profit Logic Agent. You fight for the most profitable product.
+      Math is king. Respond in JSON only.`,
+      `${context}
+      Which ONE product should win based on profit logic?
+      JSON: {"champion": "product name", "scores": {"emotion":7,"profit":9,"viral":7,"identity":6,"risk":3}, "argument": "profit reasoning"}`,
+      'DeepSeek — Profit Logic'
+    ),
+    callAI('llama',
+      `You are Llama, the TikTok Scroll-Stopper Agent. You fight for the product that stops scrolls.
+      Respond in JSON only.`,
+      `${context}
+      Which ONE product wins on TikTok virality and buying trigger?
+      JSON: {"champion": "product name", "scores": {"emotion":9,"profit":6,"viral":10,"identity":7,"risk":3}, "argument": "tiktok reasoning"}`,
+      'Llama — TikTok Expert'
+    ),
+    callAI('qwen',
+      `You are Qwen, the Anime Culture Intelligence Agent. You fight for the product with deepest anime identity connection.
+      Respond in JSON only.`,
+      `${context}
+      Which ONE product has the strongest anime parent identity connection?
+      JSON: {"champion": "product name", "scores": {"emotion":10,"profit":6,"viral":8,"identity":10,"risk":2}, "argument": "anime culture reasoning"}`,
+      'Qwen — Anime Culture'
+    ),
+    callAI('mistral',
+      `You are Mistral, the Devil's Advocate Agent. Find weaknesses in top candidates.
+      Respond in JSON only.`,
+      `${context}
+      Which product is the SAFEST bet (lowest risk, most balanced)?
+      JSON: {"champion": "product name", "scores": {"emotion":7,"profit":8,"viral":7,"identity":7,"risk":1}, "argument": "safety and balance reasoning"}`,
+      'Mistral — Risk Balancer'
+    )
+  ];
+
+  const debateResults = await Promise.allSettled(debatePromises);
+  const votes = [];
+
+  debateResults.forEach((r, i) => {
+    if (r.status === 'fulfilled') {
+      const parsed = parseJSON(r.value);
+      if (parsed && parsed.champion) {
+        votes.push(parsed);
+        log(`Vote ${i+1}: "${parsed.champion}" — ${parsed.argument?.slice(0,80)}...`, 'info');
+      }
+    }
+  });
+
+  log('JS Scoring Engine calculating...', 'gold');
+
+  const candidateMap = {};
+  const weights = { emotion: 0.25, profit: 0.30, viral: 0.25, identity: 0.15, risk: 0.05 };
+
+  votes.forEach(vote => {
+    const name = vote.champion;
+    if (!candidateMap[name]) candidateMap[name] = { name, voteCount: 0, totalScore: 0, scores: {emotion:0,profit:0,viral:0,identity:0,risk:0}, arguments: [] };
+    candidateMap[name].voteCount++;
+    candidateMap[name].arguments.push(vote.argument || '');
+
+    const s = vote.scores || {};
+    Object.keys(weights).forEach(k => {
+      candidateMap[name].scores[k] = ((candidateMap[name].scores[k] || 0) + (s[k] || 5));
+    });
+  });
+
+  const candidates = Object.values(candidateMap).map(c => {
+    Object.keys(weights).forEach(k => { c.scores[k] = Math.round(c.scores[k] / c.voteCount); });
+    c.finalScore = (
+      c.scores.emotion * weights.emotion +
+      c.scores.profit * weights.profit +
+      c.scores.viral * weights.viral +
+      c.scores.identity * weights.identity +
+      (10 - c.scores.risk) * weights.risk
+    );
+    c.finalScore = Math.round(c.finalScore * 10) / 10;
+    return c;
+  }).sort((a,b) => (b.voteCount - a.voteCount) || (b.finalScore - a.finalScore));
+
+  const winner = candidates[0];
+  log(`🏆 JS Winner: "${winner?.name}" — Score: ${winner?.finalScore}/10`, 'gold');
+
+  setAgentStep('step-debate', 'done');
+  setLayerStatus(2, 'done', '✓ Winner Selected');
+  updateProgress(50);
+
+  return { winner, allVotes: votes, candidates };
+}
+
+// ============================================================
+// LAYER 3: EXECUTE
+// ============================================================
+async function runExecute(config, winner, scoutData) {
+  log('═══ LAYER 3: EXECUTION ═══', 'gold');
+  setLayerStatus(3, 'active', 'Running...');
+  updateProgress(55);
+
+  const winnerName = winner?.name || 'Selected Product';
+  const winnerContext = `
+Winner Product: ${winnerName}
+Brand: ${config.brand}
+Niche: ${config.niche}
+Target Market: ${config.market}
+Brand Truth: "We sell origin stories, not products"
+Brand Archetype: Warrior Sage
+NEVER SAY: cute, buy now, discount, limited offer, baby product
+ALWAYS SAY: origin story, generation, legacy, chapter begins, anime born
+Emotion triggers to use: PRIDE, NOSTALGIA, BELONGING, LEGACY
+`;
+
+  setAgentStep('step-psychology', 'running');
+  const psychResult = await callAI('deepseek',
+    `You are an elite consumer psychology expert for ${config.brand}. 
+    You understand anime parent identity and emotional commerce deeply.
+    Output detailed customer psychology profile.`,
+    `${winnerContext}
+    Create a complete customer psychology profile for the ideal buyer of: ${winnerName}
+    
+    Include:
+    1. PERSONA: Name, age, income, lifestyle, social media habits
+    2. CORE FEAR: What keeps them up at night as a parent
+    3. CORE DREAM: What they want to feel as a parent
+    4. BIGGEST INSECURITY: What social media makes them feel
+    5. TOP 5 TRIGGER WORDS: Exact phrases that make them buy
+    6. BEST TIME TO REACH: When they're online and in buying mood
+    7. ANIME IDENTITY: How their anime childhood connects to parenting
+    8. SELLING ANGLE: The ONE thing that makes them buy without hesitation`,
+    'DeepSeek — Customer Psychology'
+  );
+  setAgentStep('step-psychology', 'done');
+  await sleep(800);
+
+  setAgentStep('step-copy', 'running');
+  const copyResult = await callAI('llama',
+    `You are an elite copywriter for ${config.brand} — an anime identity brand, not a baby clothes shop.
+    Every word must trigger: PRIDE, NOSTALGIA, BELONGING, or LEGACY.
+    NEVER use: cute, buy now, discount, limited offer, baby product.
+    ALWAYS use: origin story, generation, legacy, chapter begins, anime born.`,
+    `${winnerContext}
+    Customer Psychology: ${psychResult.slice(0, 500)}
+    
+    Write ALL platform copy for: ${winnerName}
+    
+    FORMAT EXACTLY LIKE THIS:
+    
+    === SHOPIFY ===
+    TITLE: [SEO title using identity language]
+    DESCRIPTION: [300 word storytelling format, emotional hook → anime nostalgia → parent identity → child future → call to belonging]
+    BULLET 1: [benefit]
+    BULLET 2: [benefit]  
+    BULLET 3: [benefit]
+    ANCHOR: [$79.99 crossed out → $49.99 "You save $30 from the Legacy Collection"]
+    
+    === TIKTOK ===
+    HOOK (0-3s): [emotional shock, 1 line]
+    NOSTALGIA (3-8s): [anime memory trigger]
+    IDENTITY (8-20s): [parent identity + product]
+    LEGACY (20-25s): [child future vision]
+    CTA (25-30s): [call to belonging]
+    CAPTION: [story caption]
+    HASHTAGS: [10 relevant hashtags]
+    
+    === PINTEREST ===
+    PIN 1 TITLE: | PIN 1 DESC:
+    PIN 2 TITLE: | PIN 2 DESC:
+    PIN 3 TITLE: | PIN 3 DESC:
+    PIN 4 TITLE: | PIN 4 DESC:
+    PIN 5 TITLE: | PIN 5 DESC:
+    SEO KEYWORDS: [list]
+    
+    === EMAIL ===
+    SUBJECT: [open-rate maximized]
+    BODY: [250 word story format, emotional]
+    CTA: [button text]
+    
+    === PRICING ===
+    ANCHOR PRICE: $[high]
+    SALE PRICE: $[accessible]
+    BUNDLE: [bundle name + price]
+    DISCOUNT TEXT: [Rule of 100 — "$X off" vs "X% off" — choose best]
+    BUNDLE TEXT: [exact text to show customer]`,
+    'Llama — Copy + Pricing Engine'
+  );
+  setAgentStep('step-copy', 'done');
+  await sleep(800);
+
+  setAgentStep('step-design', 'running');
+  const designResult = await callAI('qwen',
+    `You are an elite product design director for ${config.brand}.
+    Visual identity: Navy #0A1F2E + Gold #D4AF37 + Cream #F5F0E8.
+    Every image must feel: cinematic, anime-inspired minimal, emotional storytelling, premium.
+    Respond with design concept AND Pollinations.ai prompt.`,
+    `${winnerContext}
+    Create a winning design concept for: ${winnerName}
+    
+    Provide:
+    1. CONCEPT NAME: [creative name]
+    2. VISUAL DIRECTION: [2-3 sentences]
+    3. COLOR USAGE: How navy/gold/cream are used
+    4. MOOD: What emotion it evokes
+    5. POLLINATIONS PROMPT: [ready-to-use prompt]
+    Format: "${winnerName}, cinematic product photography, navy #0A1F2E background, gold #D4AF37 accent light, cream foreground elements, anime-inspired minimal aesthetic, Rembrandt lighting, premium emotional storytelling, 35mm lens depth of field, no text, no watermark"
+    6. LEONARDO AI PROMPT: [detailed creative prompt for Leonardo]`,
+    'Qwen — Design War Room'
+  );
+  setAgentStep('step-design', 'done');
+  await sleep(800);
+
+  setAgentStep('step-competitor', 'running');
+  const competitorResult = await callAI('gemini',
+    `You are a competitive intelligence and trend prediction expert for ${config.brand}.
+    Focus on ${config.niche} niche in ${config.market} market.`,
+    `${winnerContext}
+    
+    Provide TWO sections:
+    
+    === COMPETITOR ANALYSIS ===
+    Top 2-3 competitors in ${config.niche} space:
+    - Their ad platforms (where they ARE vs where they ARE NOT)
+    - Their biggest weakness (shipping, UX, copy, pricing)
+    - What they're NOT doing that we WILL do
+    - Our exact strategic advantage
+    
+    === TREND PREDICTION ===
+    1. CURRENT VIRAL: What's hot RIGHT NOW in baby/anime niche
+    2. 2-WEEK PREDICTION: What will be viral in 14 days
+    3. SEASONAL OPPORTUNITY: Any seasonal angle this month
+    4. ACTION PRIORITY: "Launch NOW" or "Wait X days" and why`,
+    'Gemini — Competitor + Trend'
+  );
+  setAgentStep('step-competitor', 'done');
+
+  setLayerStatus(3, 'done', '✓ Complete');
+  updateProgress(85);
+  log('Layer 3 Execution complete', 'success');
+
+  return { psychResult, copyResult, designResult, competitorResult };
+}
+
+// ============================================================
+// IMAGE GENERATION
+// ============================================================
+async function generateImages(winnerName, designResult) {
+  log('Generating product mockup images...', 'gold');
+
+  const promptMatch = designResult.match(/POLLINATIONS PROMPT[:\s]+"?([^"\n]+)/i);
+  const basePrompt = promptMatch ? promptMatch[1] :
+    `${winnerName}, cinematic product photography, navy background, gold accent light, cream foreground, anime-inspired minimal aesthetic, Rembrandt lighting, premium emotional storytelling, 35mm lens depth of field, no text no watermark`;
+
+  const encodedPrompt = encodeURIComponent(basePrompt);
+  const seed = 1024;
+
+  const images = [
+    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=1024&seed=${seed}&enhance=true&nologo=true`, label: '1:1 Instagram' },
+    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=576&height=1024&seed=${seed}&enhance=true&nologo=true`, label: '9:16 TikTok' },
+    { url: `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=576&seed=${seed}&enhance=true&nologo=true`, label: '16:9 Banner' }
+  ];
+
+  const grid = document.getElementById('imageGrid');
+  grid.innerHTML = '';
+  images.forEach((img) => {
+    const card = document.createElement('div');
+    card.className = 'image-card';
+    card.innerHTML = `
+      <img src="${img.url}" alt="${img.label}" loading="lazy" 
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+      <div class="image-placeholder" style="display:none">
+        <div style="font-size:24px">⏳</div>
+        <div style="font-size:11px">Generating...</div>
+      </div>
+      <div class="img-label">${img.label}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  return images[0].url;
+}
+
+// ============================================================
+// SAVE TO SHEETS
+// ============================================================
+async function saveToSheets(config, winner, outputs) {
+  if (!config.sheetId) { log('Sheets ID missing — skipping', 'warn'); return false; }
+
+  try {
+    log('Saving to Google Sheets...', 'info');
+    const imageUrl = STATE.results.imageUrl || '';
+    const today = new Date().toLocaleDateString();
+
+    const values = [[
+      today,
+      winner?.name || '',
+      winner?.finalScore || '',
+      winner?.scores?.emotion || '',
+      winner?.scores?.profit || '',
+      winner?.scores?.viral || '',
+      winner?.scores?.identity || '',
+      winner?.scores?.risk || '',
+      outputs.psychResult?.slice(0, 500) || '',
+      outputs.copyResult?.slice(0, 800) || '',
+      outputs.designResult?.slice(0, 400) || '',
+      outputs.competitorResult?.slice(0, 400) || '',
+      imageUrl ? `=IMAGE("${imageUrl}",4,100,100)` : ''
+    ]];
+
+    const response = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${config.sheetId}/values/A1:M1:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ values })
+      }
+    );
+
+    if (response.ok) {
+      log('✓ Saved to Google Sheets', 'success');
+      document.getElementById('saveSheets').classList.add('done');
+      document.getElementById('saveSheets').innerHTML = '<span class="save-icon">✅</span><span>Google Sheets — Saved</span>';
+      return true;
+    } else {
+      log('Sheets save failed — check Sheet ID and permissions', 'warn');
+      return false;
+    }
+  } catch(e) {
+    log('Sheets error: ' + e.message, 'warn');
+    return false;
+  }
+}
+
+// ============================================================
+// TELEGRAM
+// ============================================================
+async function sendTelegram(config, winner, imageUrl) {
+  if (!config.telegramToken || !config.chatId) {
+    log('Telegram credentials missing — skipping', 'warn');
+    return false;
+  }
+
+  try {
+    log('Sending Telegram notification...', 'info');
+
+    const caption = `🏯 <b>NinjaNursery™ Agent V2.0</b>\n\n` +
+      `⚔️ <b>Today's Winner:</b> ${winner?.name || 'Product Selected'}\n` +
+      `📊 <b>Final Score:</b> ${winner?.finalScore || '-'}/10\n` +
+      `💰 <b>Profit Score:</b> ${winner?.scores?.profit || '-'}/10\n` +
+      `🔥 <b>Viral Score:</b> ${winner?.scores?.viral || '-'}/10\n` +
+      `🎌 <b>Identity Score:</b> ${winner?.scores?.identity || '-'}/10\n\n` +
+      `"We don't sell baby products. We sell origin stories."\n\n` +
+      `📅 ${new Date().toLocaleString()}`;
+
+    const url = `https://api.telegram.org/bot${config.telegramToken}/sendPhoto`;
+    const payload = {
+      chat_id: config.chatId,
+      photo: imageUrl || 'https://image.pollinations.ai/prompt/NinjaNursery%20anime%20baby%20brand%20logo%20navy%20gold?width=512&height=512&nologo=true',
+      caption: caption,
+      parse_mode: 'HTML'
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if (data.ok) {
+      log('✓ Telegram notification sent', 'success');
+      document.getElementById('saveTelegram').classList.add('done');
+      document.getElementById('saveTelegram').innerHTML = '<span class="save-icon">✅</span><span>Telegram — Sent</span>';
+      return true;
+    } else {
+      log('Telegram error: ' + data.description, 'warn');
+      return false;
+    }
+  } catch(e) {
+    log('Telegram error: ' + e.message, 'warn');
+    return false;
+  }
+}
+
+// ============================================================
+// DISPLAY RESULTS
+// ============================================================
+function displayResults(winner, outputs) {
+  document.getElementById('resultsEmpty').style.display = 'none';
+  document.getElementById('resultsContent').style.display = 'block';
+  document.getElementById('copyEmpty').style.display = 'none';
+  document.getElementById('copyContent').style.display = 'block';
+  document.getElementById('imagesEmpty').style.display = 'none';
+  document.getElementById('imagesContent').style.display = 'block';
+
+  const s = winner?.scores || {};
+  document.getElementById('scoreEmotion').textContent = s.emotion || '-';
+  document.getElementById('scoreProfit').textContent = s.profit || '-';
+  document.getElementById('scoreViral').textContent = s.viral || '-';
+  document.getElementById('scoreIdentity').textContent = s.identity || '-';
+  document.getElementById('scoreFinal').textContent = winner?.finalScore || '-';
+
+  const grid = document.getElementById('productGrid');
+  const product = {
+    name: winner?.name || 'Winner Product',
+    voteCount: winner?.voteCount || 5,
+    finalScore: winner?.finalScore || 7.5,
+    scores: winner?.scores || {}
+  };
+
+  grid.innerHTML = `
+    <div class="product-card winner">
+      <div class="product-rank">🏆 WINNER · ${product.voteCount}/5 VOTES</div>
+      <div class="product-name">${product.name}</div>
+      <div class="product-meta">
+        <span class="tag tag-gold">Score: ${product.finalScore}</span>
+        <span class="tag tag-green">Emotion: ${product.scores.emotion || '-'}</span>
+        <span class="tag tag-blue">Viral: ${product.scores.viral || '-'}</span>
+        <span class="tag tag-green">Identity: ${product.scores.identity || '-'}</span>
+      </div>
+      <div class="product-profit">
+        ${product.scores.profit || 7}<span>/10 profit score</span>
+      </div>
+    </div>
+  `;
+
+  const copyText = outputs.copyResult || '';
+  const extractSection = (text, start, end) => {
+    const s = text.indexOf(start);
+    const e = end ? text.indexOf(end, s) : text.length;
+    if (s === -1) return text;
+    return text.slice(s + start.length, e > s ? e : text.length).trim();
+  };
+
+  document.getElementById('shopifyCopy').textContent = extractSection(copyText, '=== SHOPIFY ===', '=== TIKTOK ===') || copyText;
+  document.getElementById('tiktokCopy').textContent = extractSection(copyText, '=== TIKTOK ===', '=== PINTEREST ===') || copyText;
+  document.getElementById('pinterestCopy').textContent = extractSection(copyText, '=== PINTEREST ===', '=== EMAIL ===') || copyText;
+  document.getElementById('emailCopy').textContent = extractSection(copyText, '=== EMAIL ===', '=== PRICING ===') || copyText;
+
+  document.getElementById('customerText').textContent = outputs.psychResult || '-';
+  document.getElementById('customerOutput').classList.add('open');
+  document.getElementById('competitorText').textContent = outputs.competitorResult || '-';
+
+  const pricingText = extractSection(copyText, '=== PRICING ===', '');
+  document.getElementById('pricingText').textContent = pricingText || 'See Shopify section for pricing details.';
+
+  document.getElementById('designConcept').textContent = outputs.designResult?.slice(0, 600) || '-';
+
+  const leonardoMatch = (outputs.designResult || '').match(/LEONARDO AI PROMPT[:\s]+(.+?)(?:\n\n|\n6\.|$)/is);
+  document.getElementById('leonardoPrompt').textContent = leonardoMatch ? leonardoMatch[1].trim() : 'See design concept above for prompt.';
+}
+
+// ============================================================
+// MAIN AGENT RUN
+// ============================================================
+async function startAgent() {
+  if (STATE.isRunning) return;
+
+  const config = getConfig();
+  if (!config.openrouterKey) {
+    showNotification('⚠ Add OpenRouter API Key in Settings first!', 'error');
+    switchTab('settings');
+    return;
+  }
+
+  STATE.isRunning = true;
+  STATE.callCount = 0;
+  updateCallCount(0);
+
+  const runBtn = document.getElementById('runBtn');
+  runBtn.disabled = true;
+  runBtn.textContent = '⏳ RUNNING...';
+  document.getElementById('runSubtitle').textContent = 'Pipeline active — please wait';
+
+  setMainStatus('running', 'AGENT RUNNING');
+  updateProgress(2);
+
+  ['step-scout-trend','step-scout-profit','step-scout-risk','step-debate',
+   'step-psychology','step-copy','step-design','step-competitor','step-save']
+    .forEach(id => setAgentStep(id, ''));
+
+  ['layer1Card','layer2Card','layer3Card'].forEach(id => {
+    document.getElementById(id).className = 'layer-card';
+  });
+
+  document.getElementById('saveSheets').className = 'save-item';
+  document.getElementById('saveSheets').innerHTML = '<span class="save-icon">📊</span><span>Google Sheets</span>';
+  document.getElementById('saveTelegram').className = 'save-item';
+  document.getElementById('saveTelegram').innerHTML = '<span class="save-icon">📱</span><span>Telegram</span>';
+
+  log('🚀 NinjaNursery™ Agent V2.0 starting...', 'gold');
+  log(`Brand: ${config.brand} | Niche: ${config.niche} | Market: ${config.market}`, 'info');
+
+  try {
+    const scoutData = await runScout(config);
+    await sleep(500);
+
+    const debateData = await runDebate(config, scoutData);
+    const winner = debateData.winner;
+    STATE.results.winner = winner;
+    await sleep(500);
+
+    const outputs = await runExecute(config, winner, scoutData);
+    STATE.results.outputs = outputs;
+
+    updateProgress(87);
+    const imageUrl = await generateImages(winner?.name || 'Product', outputs.designResult);
+    STATE.results.imageUrl = imageUrl;
+    updateProgress(90);
+
+    setAgentStep('step-save', 'running');
+    await saveToSheets(config, winner, outputs);
+    await sleep(500);
+    await sendTelegram(config, winner, imageUrl);
+    setAgentStep('step-save', 'done');
+
+    displayResults(winner, outputs);
+
+    updateProgress(100);
+    setMainStatus('done', 'COMPLETE ✓');
+    document.getElementById('lastRunTime').textContent = 'Last run: ' + new Date().toLocaleTimeString();
+    log('═══════════════════════════════', 'gold');
+    log(`🏆 WINNER: ${winner?.name || 'Product Selected'}`, 'gold');
+    log(`Final Score: ${winner?.finalScore || '-'}/10`, 'success');
+    log('All outputs generated. Check Results, Copy & Images tabs.', 'success');
+    showNotification('✓ Agent complete! Check Results tab.', 'success');
+
+  } catch(err) {
+    log('ERROR: ' + err.message, 'error');
+    setMainStatus('error', 'ERROR');
+    showNotification('Error: ' + err.message, 'error');
+  }
+
+  STATE.isRunning = false;
+  runBtn.disabled = false;
+  runBtn.textContent = '⚔ RUN AGENT';
+  document.getElementById('runSubtitle').textContent = '12 AI calls · 3 layers · Full pipeline';
+}
+
+// ============================================================
+// COPY HELPERS
+// ============================================================
+function copyCurrentPlatform() {
+  const el = document.getElementById(STATE.currentPlatform + 'Copy');
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => showNotification('Copied!', 'success'));
+}
+
+function copyLeonardo() {
+  const el = document.getElementById('leonardoPrompt');
+  navigator.clipboard.writeText(el.textContent).then(() => showNotification('Leonardo prompt copied!', 'success'));
+}
+
+function downloadCopy() {
+  const platforms = ['shopify','tiktok','pinterest','email'];
+  let text = `NinjaNursery™ Agent V2.0 — Copy Output\n${'═'.repeat(50)}\n\n`;
+  platforms.forEach(p => {
+    const el = document.getElementById(p + 'Copy');
+    text += `\n${'═'.repeat(20)} ${p.toUpperCase()} ${'═'.repeat(20)}\n`;
+    text += el?.textContent || '-';
+    text += '\n\n';
+  });
+  const blob = new Blob([text], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `NinjaNursery_Copy_${new Date().toISOString().slice(0,10)}.txt`;
+  a.click();
+}
+
+// ============================================================
+// TEST TELEGRAM
+// ============================================================
+async function testTelegram() {
+  const token = document.getElementById('settingTelegramToken').value.trim();
+  const chatId = document.getElementById('settingChatId').value.trim();
+  if (!token || !chatId) { showNotification('Enter Token and Chat ID first', 'error'); return; }
+
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: '✅ NinjaNursery™ Agent V2.0 connected!\n\n"We sell origin stories." ⚔️',
+        parse_mode: 'HTML'
+      })
+    });
+    const d = await r.json();
+    if (d.ok) showNotification('✓ Telegram test sent!', 'success');
+    else showNotification('Error: ' + d.description, 'error');
+  } catch(e) {
+    showNotification('Error: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+loadSettings();
+log('System initialized. Configure settings then press RUN AGENT.', 'info');
+</script>
+</body>
+</html>
