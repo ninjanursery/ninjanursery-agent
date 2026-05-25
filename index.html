@@ -1303,7 +1303,7 @@ function setMainStatus(status, text) {
 // ============================================================
 // AI CALL — FIXED MODEL ID
 // ============================================================
-async function callAI(model, systemPrompt, userPrompt, label) {
+async function callAI(model, systemPrompt, userPrompt, label, retries = 3) {
   const config = getConfig();
   if (!config.openrouterKey) {
     throw new Error('OpenRouter API Key missing. Go to Settings.');
