@@ -844,7 +844,7 @@ async function callAI(model, systemPrompt, userPrompt, label){
 
   // ✅ FIXED MODEL IDs - সব সঠিক
   const modelMap = {
-    'gemini':   'google/gemini-2.5-flash',
+    'gemini':   'google/gemini-2.0-flash-001',
     'deepseek': 'deepseek/deepseek-r1-0528',
     'llama':    'meta-llama/llama-3.3-70b-instruct',
     'qwen':     'qwen/qwen-2.5-72b-instruct',
@@ -868,7 +868,7 @@ async function callAI(model, systemPrompt, userPrompt, label){
 
       // ✅ Gemini 2.5 Flash — thinking budget দিতে হয়
       if(isGemini){
-        requestBody.max_tokens = 3000;
+        requestBody.max_tokens = 1500;
         
       } else if(isDeepseek){
         requestBody.max_tokens = 2000;
