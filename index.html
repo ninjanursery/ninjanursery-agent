@@ -844,11 +844,11 @@ async function callAI(model, systemPrompt, userPrompt, label){
 
   // ✅ FIXED MODEL IDs - সব সঠিক
   const modelMap = {
-    'gemini':   'google/gemini-2.0-flash-001',
-    'deepseek': 'deepseek/deepseek-r1-0528',
-    'llama':    'meta-llama/llama-3.3-70b-instruct',
-    'qwen':     'qwen/qwen-2.5-72b-instruct',
-    'mistral':  'mistralai/mistral-small-3.1-24b-instruct'
+'gemini':   'google/gemini-2.0-flash-exp:free',
+    'deepseek': 'deepseek/deepseek-r1:free',
+    'llama':    'meta-llama/llama-3.3-70b-instruct:free',
+    'qwen':     'qwen/qwen-2.5-72b-instruct:free',
+    'mistral':  'mistralai/mistral-small-3.1-24b-instruct:free'
   };
 
   const modelId = modelMap[model] || model;
