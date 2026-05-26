@@ -845,10 +845,10 @@ async function callAI(model, systemPrompt, userPrompt, label){
   // ✅ FIXED MODEL IDs - সব সঠিক
   const modelMap = {
     'gemini':   'google/gemini-2.5-flash',
-    'deepseek': 'deepseek/deepseek-r1',
+    'deepseek': 'deepseek/deepseek-r1-0528',
     'llama':    'meta-llama/llama-3.3-70b-instruct',
     'qwen':     'qwen/qwen-2.5-72b-instruct',
-    'mistral':  'mistralai/mistral-small-3.2-24b-instruct'
+    'mistral':  'mistralai/mistral-small-3.1-24b-instruct'
   };
 
   const modelId = modelMap[model] || model;
@@ -869,7 +869,7 @@ async function callAI(model, systemPrompt, userPrompt, label){
       // ✅ Gemini 2.5 Flash — thinking budget দিতে হয়
       if(isGemini){
         requestBody.max_tokens = 4000;
-        requestBody.thinking = { type: 'disabled' }; // thinking বন্ধ রাখো speed এর জন্য
+        
       } else if(isDeepseek){
         requestBody.max_tokens = 2000;
       } else {
