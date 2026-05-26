@@ -802,11 +802,11 @@ async function callAI(model,systemPrompt,userPrompt,label){
   if(!config.openrouterKey) throw new Error('OpenRouter API Key missing!');
   log(`Calling ${label}...`,'info');
   const modelMap={
-    'gemini':'google/gemini-2.5-flash-preview-05-20',
+    'gemini':'google/gemini-2.5-flash',
     'deepseek':'deepseek/deepseek-r1',
     'llama':'meta-llama/llama-3.3-70b-instruct',
     'qwen':'qwen/qwen-2.5-72b-instruct',
-    'mistral':'mistralai/mistral-7b-instruct'
+    'mistral':'mistralai/mistral-small-3.2-24b-instruct'
   };
   const modelId=modelMap[model]||model;
   for(let attempt=1;attempt<=3;attempt++){
