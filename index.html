@@ -893,7 +893,7 @@ async function callAI(model, systemPrompt, userPrompt, label){
 
       const data = await response.json();
       updateCallCount(STATE.callCount+1);
-      const text = data.choices?.[0]?.message?.content || '';
+      const text = data.choices?.[0]?.message?.content || data.choices?.[0]?.message?.reasoning_content || '';
       log(`✓ ${label} (${text.length} chars)`, 'success');
       return text;
 
