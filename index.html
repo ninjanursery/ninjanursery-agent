@@ -492,7 +492,7 @@ const config=getConfig();
 if(!config.openrouterKey) throw new Error('OpenRouter API Key নেই!');
 log(`Calling ${label}...`,'info');
 const modelMap={
-'gemini':'google/gemini-2.0-flash-exp:free',
+'gemini':'google/gemma-3-27b-it:free',
 'deepseek':'deepseek/deepseek-r1-zero:free',
 'llama':'meta-llama/llama-3.3-70b-instruct:free',
 'qwen':'qwen/qwen3-235b-a22b:free',
