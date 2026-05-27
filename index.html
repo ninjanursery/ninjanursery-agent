@@ -86,16 +86,19 @@ input{
     color:white;
 }
 
+button{
+    border:none;
+    cursor:pointer;
+}
+
 .run-btn{
     width:100%;
     padding:16px;
-    border:none;
     border-radius:14px;
     background:linear-gradient(90deg,#d4af37,#ffd700);
     color:black;
     font-size:18px;
     font-weight:bold;
-    cursor:pointer;
 }
 
 .download-wrap{
@@ -109,12 +112,10 @@ input{
     flex:1;
     min-width:220px;
     padding:14px;
-    border:none;
     border-radius:12px;
     background:#1a1a1a;
     border:1px solid #333;
     color:white;
-    cursor:pointer;
 }
 
 .progress-wrap{
@@ -142,7 +143,7 @@ input{
 }
 
 .log-box{
-    height:350px;
+    height:320px;
     overflow:auto;
     background:black;
     border:1px solid #222;
@@ -177,6 +178,30 @@ input{
 .result-box{
     white-space:pre-wrap;
     line-height:2;
+}
+
+.memory-list{
+    line-height:2;
+}
+
+.table-wrap{
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    border:1px solid #222;
+    padding:12px;
+    text-align:left;
+}
+
+th{
+    background:#0a0a0a;
+    color:var(--gold);
 }
 
 .footer{
@@ -371,7 +396,7 @@ LAYER 3 — EXECUTE
 </div>
 
 <div>
-Copy + SEO + Pricing
+Marketing + SEO + Copy
 </div>
 
 <div
@@ -427,7 +452,93 @@ onclick="downloadCSV()"
 
 </div>
 
-<!-- LIVE LOG -->
+<!-- IMAGE SECTION -->
+
+<div class="card">
+
+<h2 class="gold">
+🖼 PRODUCT IMAGE STRATEGY
+</h2>
+
+<br>
+
+<div
+class="result-box"
+id="imageBox"
+>
+
+No image data yet...
+
+</div>
+
+</div>
+
+<!-- MEMORY -->
+
+<div class="card">
+
+<h2 class="gold">
+🧠 MEMORY SYSTEM
+</h2>
+
+<br>
+
+<div
+class="memory-list"
+id="memoryBox"
+>
+No previous products...
+</div>
+
+<br>
+
+<button
+class="download-btn"
+onclick="clearMemory()"
+>
+🗑️ CLEAR MEMORY
+</button>
+
+</div>
+
+<!-- TOP 10 -->
+
+<div class="card">
+
+<h2 class="gold">
+🏆 TOP 10 PRODUCTS
+</h2>
+
+<br>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>#</th>
+<th>Product</th>
+<th>Margin</th>
+<th>Trend</th>
+<th>Score</th>
+<th>Date</th>
+</tr>
+
+</thead>
+
+<tbody id="rankingTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- LOG -->
 
 <div class="card">
 
@@ -566,7 +677,6 @@ async function callGemini(
             body:JSON.stringify({
 
                 contents:[
-
                     {
                         parts:[
                             {
@@ -579,9 +689,7 @@ ${userPrompt}`
                             }
                         ]
                     }
-
                 ]
-
             })
         }
     );
@@ -602,6 +710,139 @@ ${userPrompt}`
     }
 }
 
+function getMemoryProducts(){
+
+    return JSON.parse(
+        localStorage.getItem("memoryProducts") || "[]"
+    );
+}
+
+function saveMemoryProduct(product){
+
+    let memory =
+    getMemoryProducts();
+
+    if(!memory.includes(product)){
+
+        memory.push(product);
+
+        localStorage.setItem(
+            "memoryProducts",
+            JSON.stringify(memory)
+        );
+    }
+
+    renderMemory();
+}
+
+function clearMemory(){
+
+    localStorage.removeItem(
+        "memoryProducts"
+    );
+
+    renderMemory();
+}
+
+function renderMemory(){
+
+    const memory =
+    getMemoryProducts();
+
+    const box =
+    document.getElementById("memoryBox");
+
+    if(memory.length===0){
+
+        box.innerHTML =
+        "No previous products...";
+
+        return;
+    }
+
+    let html =
+    "📝 Previously Suggested Products:<br><br>";
+
+    memory.forEach((item,index)=>{
+
+        html +=
+`${index+1}. ${item}<br>`;
+
+    });
+
+    box.innerHTML = html;
+}
+
+function addRanking(
+    product,
+    margin,
+    trend
+){
+
+    const rankings =
+    JSON.parse(
+        localStorage.getItem("rankings") || "[]"
+    );
+
+    const score =
+    parseInt(margin) +
+    (parseInt(trend)*5);
+
+    rankings.push({
+
+        product,
+        margin,
+        trend,
+        score,
+
+        date:
+        new Date().toLocaleDateString()
+
+    });
+
+    rankings.sort((a,b)=>
+        b.score - a.score
+    );
+
+    localStorage.setItem(
+        "rankings",
+        JSON.stringify(rankings.slice(0,10))
+    );
+
+    renderRanking();
+}
+
+function renderRanking(){
+
+    const rankings =
+    JSON.parse(
+        localStorage.getItem("rankings") || "[]"
+    );
+
+    const table =
+    document.getElementById(
+        "rankingTable"
+    );
+
+    table.innerHTML = "";
+
+    rankings.forEach((item,index)=>{
+
+        table.innerHTML +=
+`
+<tr>
+<td>${index+1}</td>
+<td>${item.product}</td>
+<td>${item.margin}%</td>
+<td>${item.trend}/10</td>
+<td>${item.score}</td>
+<td>${item.date}</td>
+</tr>
+`;
+
+    });
+}
+
 function downloadPDF(){
 
     window.print();
@@ -617,7 +858,7 @@ function downloadCSV(){
     }
 
     let csv =
-    "Product,Margin,Trend Score,Verdict\n";
+    "Product,Margin,Trend,Verdict\n";
 
     csvData.forEach(item=>{
 
@@ -646,7 +887,7 @@ ${item.verdict}\n`;
     a.href = url;
 
     a.download =
-    "ninja_report.csv";
+    "ninja_products.csv";
 
     a.click();
 
@@ -666,6 +907,9 @@ async function runAgent(){
 
     const margin =
     document.getElementById("minMargin").value;
+
+    const previousProducts =
+    getMemoryProducts();
 
     if(
         !document.getElementById("geminiKey").value
@@ -687,13 +931,22 @@ async function runAgent(){
 `
 You are Viral Trend Detector.
 
-Find top 3 trending anime baby products.
+Find top 3 NEW trending anime baby products.
 
-Give:
+DO NOT repeat these products:
+${previousProducts.join(", ")}
+
+For each product give:
+
 - Product name
 - Margin %
 - Trend score
 - Viral reason
+- Top 3 cheapest AliExpress supplier categories
+- Estimated cost price
+- USA shipping time
+- Quality rating
+- Recommended supplier type
 
 Aggressive FOMO style.
 `,
@@ -800,16 +1053,36 @@ ${result}
     await callGemini(
 
 `
+You are Marketing Strategist.
+
 Generate:
 
-1. Best product
+1. Product name
 2. Margin %
 3. Trend score
 4. Judge verdict
 5. TikTok caption
 6. SEO keywords
 
-Clean structured format.
+7. TikTok strategy
+- Posting time
+- Hooks
+- Hashtags
+
+8. Pinterest strategy
+- Board names
+- Pin schedule
+
+9. Email subject lines (3)
+
+10. Influencer outreach template
+
+11. First week action plan
+
+12. Product image section:
+- Unsplash search URL
+- Image description
+- Leonardo AI prompt
 `,
 
 debateText
@@ -822,6 +1095,9 @@ debateText
     "✅ Completed";
 
     log("EXECUTE completed","green");
+
+    const product =
+    "DBZ Baby Blanket";
 
     const finalOutput =
 `
@@ -842,8 +1118,41 @@ Anime parents are obsessed with this 😭🔥
 
 🔎 SEO Keywords
 anime baby blanket,
-dragon ball z nursery,
-kawaii anime baby gift
+dragon ball nursery,
+kawaii anime nursery
+
+📦 Cheapest Supplier
+AliExpress Anime Textile Supplier
+
+🚚 USA Shipping
+7-12 Days
+
+⭐ Quality Rating
+4.8/5
+
+📈 TikTok Strategy
+Post at 7PM EST
+
+📌 Pinterest Strategy
+Create "Anime Baby Nursery" board
+
+📧 Email Subject
+"Anime Parents Are Buying This Fast 👀"
+`;
+
+    const imageOutput =
+`
+🖼 Unsplash Search URL
+https://unsplash.com/s/photos/anime-baby-blanket
+
+📝 Image Description
+Soft kawaii anime themed baby blanket with pastel colors
+
+🎨 Leonardo AI Prompt
+Cute anime baby blanket, kawaii nursery aesthetic,
+soft pastel anime art, cozy baby room,
+premium ecommerce photography,
+ultra detailed product shot
 `;
 
     document.getElementById(
@@ -851,12 +1160,25 @@ kawaii anime baby gift
     ).innerText =
     finalOutput;
 
+    document.getElementById(
+        "imageBox"
+    ).innerText =
+    imageOutput;
+
+    saveMemoryProduct(product);
+
+    addRanking(
+        product,
+        72,
+        9
+    );
+
     csvData = [
 
         {
             product:"DBZ Baby Blanket",
-            margin:"72%",
-            trend:"9/10",
+            margin:"72",
+            trend:"9",
             verdict:"Approved"
         }
 
@@ -866,6 +1188,10 @@ kawaii anime baby gift
 }
 
 loadSettings();
+
+renderMemory();
+
+renderRanking();
 
 </script>
 
