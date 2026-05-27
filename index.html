@@ -492,10 +492,10 @@ const config=getConfig();
 if(!config.openrouterKey) throw new Error('OpenRouter API Key নেই!');
 log(`Calling ${label}...`,'info');
 const modelMap={
-'gemini':'google/gemini-2.5-flash-preview:free',
-'deepseek':'deepseek/deepseek-r1',
-'llama':'meta-llama/llama-3.3-70b-instruct',
-'qwen':'qwen/qwen-2.5-72b-instruct',
+'gemini':'google/gemini-2.0-flash-exp:free',
+'deepseek':'deepseek/deepseek-r1-zero:free',
+'llama':'meta-llama/llama-3.3-70b-instruct:free',
+'qwen':'qwen/qwen3-235b-a22b:free',
 'mistral':'mistralai/mistral-small-3.1-24b-instruct:free'
 };
 const modelId=modelMap[model]||model;
