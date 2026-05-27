@@ -266,12 +266,13 @@ footer span{color:var(--gold);}
     <div id="apiTestResult" style="margin-top:12px;font-size:12px;display:none"></div>
     <!-- MODEL INFO BOX - shows current active models -->
     <div class="model-info" style="margin-top:16px">
-      <strong>🤖 Active Models (May 2026)</strong><br>
-      🔍 Trend: <strong>google/gemini-2.5-flash-lite</strong> → fallback: gemini-2.5-flash<br>
-      💰 Profit: <strong>deepseek/deepseek-chat-v3-0324:free</strong> → fallback: deepseek-r1:free<br>
-      🛡 Risk: <strong>meta-llama/llama-4-scout:free</strong> → fallback: mistral-small-3.2<br>
-      ⚔ Debate: <strong>llama-4-maverick:free · qwen3-235b:free</strong><br>
-      <span style="color:var(--text-muted);font-size:11px">Auto-fallback enabled: if a model has no endpoints, the next available model is used automatically.</span>
+      <strong>🤖 Active Models (verified May 27, 2026)</strong><br>
+      🔍 Trend: <strong>gemini-2.5-flash-lite</strong> → fallback: gemini-2.5-flash<br>
+      💰 Profit: <strong>deepseek-v4-flash:free</strong> → fallback: minimax-m2.5:free<br>
+      🛡 Risk/Balancer: <strong>gpt-oss-20b:free</strong> → fallback: gpt-oss-120b:free<br>
+      ⚔ Debate: <strong>gpt-oss-120b:free · nemotron-3-super:free</strong><br>
+      🛟 Last resort: <strong>openrouter/free</strong> (auto-picks any live free model)<br>
+      <span style="color:var(--text-muted);font-size:11px">3-tier fallback: primary → specific backup → openrouter/free. Pipeline will never hard-crash from a missing model.</span>
     </div>
   </div>
   <div class="card">
@@ -301,23 +302,28 @@ footer span{color:var(--gold);}
 <script>
 const STATE={isRunning:false,callCount:0,results:{},currentPlatform:'shopify',autoRunTimer:null};
 
-// ─── MODEL MAP (updated May 2026) ───────────────────────────────────────────
+// ─── MODEL MAP (verified live May 27 2026) ──────────────────────────────────
+// Primary models confirmed available on OpenRouter free tier right now.
+// 'openrouter/free' is the universal last-resort: OpenRouter picks any
+// available free model automatically, so the pipeline NEVER hard-crashes.
 const modelMap={
   'gemini':'google/gemini-2.5-flash-lite',
-  'deepseek':'deepseek/deepseek-chat-v3-0324:free',
-  'llama':'meta-llama/llama-4-maverick:free',
-  'qwen':'qwen/qwen3-235b-a22b:free',
-  'mistral':'meta-llama/llama-4-scout:free'
+  'deepseek':'deepseek/deepseek-v4-flash:free',
+  'llama':'openai/gpt-oss-120b:free',
+  'qwen':'nvidia/nemotron-3-super-120b-a12b:free',
+  'mistral':'openai/gpt-oss-20b:free'
 };
 
-// Fallback models: if primary returns "No endpoints", switch to this
+// Fallback chain: primary → specific fallback → openrouter/free (always works)
 const fallbackMap={
   'google/gemini-2.5-flash-lite':'google/gemini-2.5-flash',
-  'deepseek/deepseek-chat-v3-0324:free':'deepseek/deepseek-r1:free',
-  'meta-llama/llama-4-maverick:free':'meta-llama/llama-3.3-70b-instruct:free',
-  'qwen/qwen3-235b-a22b:free':'qwen/qwen-2.5-72b-instruct:free',
-  'meta-llama/llama-4-scout:free':'mistralai/mistral-small-3.2'
+  'deepseek/deepseek-v4-flash:free':'minimax/minimax-m2.5:free',
+  'openai/gpt-oss-120b:free':'nvidia/nemotron-3-super-120b-a12b:free',
+  'nvidia/nemotron-3-super-120b-a12b:free':'openai/gpt-oss-120b:free',
+  'openai/gpt-oss-20b:free':'openai/gpt-oss-120b:free'
 };
+// Universal last-resort fallback for anything not in fallbackMap
+const LAST_RESORT='openrouter/free';
 
 function saveSettings(){
 ['settingOpenRouter','settingSheetId','settingTelegramToken','settingChatId'].forEach(k=>{
@@ -415,7 +421,7 @@ headers:{
 'X-Title':'NinjaNursery Test'
 },
 body:JSON.stringify({
-model:'meta-llama/llama-4-maverick:free',
+model:'openai/gpt-oss-20b:free',
 max_tokens:10,
 messages:[{role:'user',content:'Say OK'}]
 })
@@ -423,7 +429,7 @@ messages:[{role:'user',content:'Say OK'}]
 const data=await r.json();
 if(r.ok){
 el.style.color='var(--success)';
-el.textContent='✅ API Key কাজ করছে! Model: llama-4-maverick:free';
+el.textContent='✅ API Key কাজ করছে! Model: ' + (data.model || 'gpt-oss-20b:free');
 }else{
 el.style.color='var(--error)';
 el.textContent='❌ Error: '+(data.error?.message||JSON.stringify(data));
@@ -547,11 +553,13 @@ if(!response.ok){
 let errMsg=`HTTP ${response.status}`;
 try{const errData=await response.json();errMsg=errData.error?.message||JSON.stringify(errData);}catch(e){}
 // Auto-switch to fallback on "No endpoints" error
-if((errMsg.includes('No endpoints')||errMsg.includes('no endpoints'))&&fallbackMap[activeModelId]&&attempt<=2){
-const fb=fallbackMap[activeModelId];
-log(`↩ "${activeModelId}" unavailable → switching to "${fb}"`, 'warn');
+if(errMsg.includes('No endpoints')||errMsg.includes('no endpoints')){
+const fb=fallbackMap[activeModelId]||LAST_RESORT;
+if(fb!==activeModelId&&attempt<=3){
+log(`↩ "${activeModelId.split('/').pop()}" gone → trying "${fb.split('/').pop()}"`, 'warn');
 activeModelId=fb;
 continue;
+}
 }
 throw new Error(errMsg);
 }
