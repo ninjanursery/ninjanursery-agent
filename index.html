@@ -1,1199 +1,543 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>NinjaNursery™ Agent V3.0</title>
-
-<style>
-
-:root{
-    --bg:#050505;
-    --card:#111;
-    --gold:#d4af37;
-    --text:#f5f5f5;
-    --border:#222;
-    --green:#00ff88;
-    --red:#ff4d4d;
-    --muted:#888;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:var(--bg);
-    color:var(--text);
-}
-
-header{
-    padding:20px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-.logo{
-    color:var(--gold);
-    font-size:26px;
-    font-weight:bold;
-}
-
-.sub{
-    color:var(--muted);
-    font-size:13px;
-}
-
-.container{
-    max-width:1400px;
-    margin:auto;
-    padding:20px;
-}
-
-.card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:20px;
-    margin-bottom:20px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:15px;
-}
-
-label{
-    color:var(--gold);
-    font-size:14px;
-}
-
-input{
-    width:100%;
-    margin-top:8px;
-    padding:12px;
-    background:#0b0b0b;
-    border:1px solid #222;
-    border-radius:10px;
-    color:white;
-}
-
-button{
-    border:none;
-    cursor:pointer;
-}
-
-.run-btn{
-    width:100%;
-    padding:16px;
-    border-radius:14px;
-    background:linear-gradient(90deg,#d4af37,#ffd700);
-    color:black;
-    font-size:18px;
-    font-weight:bold;
-}
-
-.download-wrap{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:15px;
-}
-
-.download-btn{
-    flex:1;
-    min-width:220px;
-    padding:14px;
-    border-radius:12px;
-    background:#1a1a1a;
-    border:1px solid #333;
-    color:white;
-}
-
-.progress-wrap{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-}
-
-.progress-box{
-    flex:1;
-    min-width:220px;
-    background:#0a0a0a;
-    border:1px solid #222;
-    border-radius:14px;
-    padding:20px;
-}
-
-.progress-title{
-    color:var(--gold);
-    margin-bottom:10px;
-}
-
-.status{
-    margin-top:10px;
-}
-
-.log-box{
-    height:320px;
-    overflow:auto;
-    background:black;
-    border:1px solid #222;
-    border-radius:12px;
-    padding:15px;
-    font-size:13px;
-    line-height:1.7;
-}
-
-.log-line{
-    margin-bottom:8px;
-}
-
-.green{
-    color:var(--green);
-}
-
-.red{
-    color:var(--red);
-}
-
-.gold{
-    color:var(--gold);
-}
-
-.counter{
-    color:var(--gold);
-    font-size:30px;
-    font-weight:bold;
-}
-
-.result-box{
-    white-space:pre-wrap;
-    line-height:2;
-}
-
-.memory-list{
-    line-height:2;
-}
-
-.table-wrap{
-    overflow:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th,td{
-    border:1px solid #222;
-    padding:12px;
-    text-align:left;
-}
-
-th{
-    background:#0a0a0a;
-    color:var(--gold);
-}
-
-.footer{
-    text-align:center;
-    padding:40px;
-    color:#666;
-    font-size:13px;
-}
-
-@media print{
-
-    body *{
-        visibility:hidden;
-    }
-
-    #resultCard,
-    #resultCard *{
-        visibility:visible;
-    }
-
-    #resultCard{
-        position:absolute;
-        left:0;
-        top:0;
-        width:100%;
-        background:white;
-        color:black;
-    }
-
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-
-<div>
-
-<div class="logo">
-🏯 NinjaNursery™ Agent V3.0
-</div>
-
-<div class="sub">
-Anime Baby Lifestyle AI Dropshipping System
-</div>
-
-</div>
-
-<div>
-
-<div class="sub">
-API CALLS
-</div>
-
-<div class="counter" id="apiCounter">
-0
-</div>
-
-</div>
-
-</header>
-
-<div class="container">
-
-<!-- SETTINGS -->
-
-<div class="card">
-
-<h2 class="gold">
-⚙ SETTINGS
-</h2>
-
-<br>
-
-<div class="grid">
-
-<div>
-<label>Gemini API Key</label>
-<input
-id="geminiKey"
-type="password"
-placeholder="AIza..."
->
-</div>
-
-<div>
-<label>Brand Name</label>
-<input
-id="brandName"
-value="NinjaNursery™"
->
-</div>
-
-<div>
-<label>Niche Keywords</label>
-<input
-id="nicheKeywords"
-value="anime baby, kawaii baby"
->
-</div>
-
-<div>
-<label>Target Market</label>
-<input
-id="targetMarket"
-value="USA Anime Parents"
->
-</div>
-
-<div>
-<label>Minimum Profit Margin %</label>
-<input
-id="minMargin"
-value="40"
->
-</div>
-
-</div>
-
-<br>
-
-<button
-class="run-btn"
-onclick="saveSettings()"
->
-💾 SAVE SETTINGS
-</button>
-
-</div>
-
-<!-- RUN -->
-
-<div class="card">
-
-<button
-class="run-btn"
-onclick="runAgent()"
->
-🚀 RUN NINJANURSERY AGENT
-</button>
-
-</div>
-
-<!-- PROGRESS -->
-
-<div class="progress-wrap">
-
-<div class="progress-box">
-
-<div class="progress-title">
-LAYER 1 — SCOUT
-</div>
-
-<div>
-Trend Detection
-</div>
-
-<div
-class="status"
-id="scoutStatus"
->
-Waiting...
-</div>
-
-</div>
-
-<div class="progress-box">
-
-<div class="progress-title">
-LAYER 2 — DEBATE
-</div>
-
-<div>
-5 AI Personalities
-</div>
-
-<div
-class="status"
-id="debateStatus"
->
-Waiting...
-</div>
-
-</div>
-
-<div class="progress-box">
-
-<div class="progress-title">
-LAYER 3 — EXECUTE
-</div>
-
-<div>
-Marketing + SEO + Copy
-</div>
-
-<div
-class="status"
-id="executeStatus"
->
-Waiting...
-</div>
-
-</div>
-
-</div>
-
-<!-- RESULTS -->
-
-<div
-class="card"
-id="resultCard"
->
-
-<h2 class="gold">
-📊 RESULTS
-</h2>
-
-<br>
-
-<div
-class="result-box"
-id="resultsBox"
->
-
-No results yet...
-
-</div>
-
-<div class="download-wrap">
-
-<button
-class="download-btn"
-onclick="downloadPDF()"
->
-📄 DOWNLOAD PDF
-</button>
-
-<button
-class="download-btn"
-onclick="downloadCSV()"
->
-📊 DOWNLOAD CSV
-</button>
-
-</div>
-
-</div>
-
-<!-- IMAGE SECTION -->
-
-<div class="card">
-
-<h2 class="gold">
-🖼 PRODUCT IMAGE STRATEGY
-</h2>
-
-<br>
-
-<div
-class="result-box"
-id="imageBox"
->
-
-No image data yet...
-
-</div>
-
-</div>
-
-<!-- MEMORY -->
-
-<div class="card">
-
-<h2 class="gold">
-🧠 MEMORY SYSTEM
-</h2>
-
-<br>
-
-<div
-class="memory-list"
-id="memoryBox"
->
-No previous products...
-</div>
-
-<br>
-
-<button
-class="download-btn"
-onclick="clearMemory()"
->
-🗑️ CLEAR MEMORY
-</button>
-
-</div>
-
-<!-- TOP 10 -->
-
-<div class="card">
-
-<h2 class="gold">
-🏆 TOP 10 PRODUCTS
-</h2>
-
-<br>
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-<th>#</th>
-<th>Product</th>
-<th>Margin</th>
-<th>Trend</th>
-<th>Score</th>
-<th>Date</th>
-</tr>
-
-</thead>
-
-<tbody id="rankingTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<!-- LOG -->
-
-<div class="card">
-
-<h2 class="gold">
-📡 LIVE LOG
-</h2>
-
-<br>
-
-<div
-class="log-box"
-id="logs"
-></div>
-
-</div>
-
-</div>
-
-<div class="footer">
-NinjaNursery™ Agent V3.0 — Gemini Powered
-</div>
-
-<script>
-
-const GEMINI_URL =
-"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-
-let apiCalls = 0;
-
-let csvData = [];
-
-function log(message,type="normal"){
-
-    const logs =
-    document.getElementById("logs");
-
-    const div =
-    document.createElement("div");
-
-    div.className = "log-line";
-
-    if(type==="green"){
-        div.classList.add("green");
-    }
-
-    if(type==="red"){
-        div.classList.add("red");
-    }
-
-    if(type==="gold"){
-        div.classList.add("gold");
-    }
-
-    div.innerText =
-    `[${new Date().toLocaleTimeString()}] ${message}`;
-
-    logs.prepend(div);
-}
-
-function updateCounter(){
-
-    document.getElementById(
-        "apiCounter"
-    ).innerText = apiCalls;
-}
-
-function saveSettings(){
-
-    localStorage.setItem(
-        "geminiKey",
-        document.getElementById("geminiKey").value
-    );
-
-    localStorage.setItem(
-        "brandName",
-        document.getElementById("brandName").value
-    );
-
-    localStorage.setItem(
-        "nicheKeywords",
-        document.getElementById("nicheKeywords").value
-    );
-
-    localStorage.setItem(
-        "targetMarket",
-        document.getElementById("targetMarket").value
-    );
-
-    localStorage.setItem(
-        "minMargin",
-        document.getElementById("minMargin").value
-    );
-
-    log("Settings saved","green");
-}
-
-function loadSettings(){
-
-    document.getElementById("geminiKey").value =
-    localStorage.getItem("geminiKey") || "";
-
-    document.getElementById("brandName").value =
-    localStorage.getItem("brandName") || "NinjaNursery™";
-
-    document.getElementById("nicheKeywords").value =
-    localStorage.getItem("nicheKeywords") || "";
-
-    document.getElementById("targetMarket").value =
-    localStorage.getItem("targetMarket") || "";
-
-    document.getElementById("minMargin").value =
-    localStorage.getItem("minMargin") || "40";
-}
-
-async function callGemini(
-    systemPrompt,
-    userPrompt
-){
-
-    const apiKey =
-    document.getElementById("geminiKey").value;
-
-    apiCalls++;
-
-    updateCounter();
-
-    const response = await fetch(
-        `${GEMINI_URL}?key=${apiKey}`,
-        {
-            method:"POST",
-
-            headers:{
-                "Content-Type":"application/json"
-            },
-
-            body:JSON.stringify({
-
-                contents:[
-                    {
-                        parts:[
-                            {
-                                text:
-`SYSTEM:
-${systemPrompt}
-
-USER:
-${userPrompt}`
-                            }
-                        ]
-                    }
-                ]
-            })
-        }
-    );
-
-    const data =
-    await response.json();
-
-    try{
-
-        return data.candidates[0]
-        .content.parts[0].text;
-
-    }catch(err){
-
-        console.error(data);
-
-        return "Gemini Error";
-    }
-}
-
-function getMemoryProducts(){
-
-    return JSON.parse(
-        localStorage.getItem("memoryProducts") || "[]"
-    );
-}
-
-function saveMemoryProduct(product){
-
-    let memory =
-    getMemoryProducts();
-
-    if(!memory.includes(product)){
-
-        memory.push(product);
-
-        localStorage.setItem(
-            "memoryProducts",
-            JSON.stringify(memory)
-        );
-    }
-
-    renderMemory();
-}
-
-function clearMemory(){
-
-    localStorage.removeItem(
-        "memoryProducts"
-    );
-
-    renderMemory();
-}
-
-function renderMemory(){
-
-    const memory =
-    getMemoryProducts();
-
-    const box =
-    document.getElementById("memoryBox");
-
-    if(memory.length===0){
-
-        box.innerHTML =
-        "No previous products...";
-
-        return;
-    }
-
-    let html =
-    "📝 Previously Suggested Products:<br><br>";
-
-    memory.forEach((item,index)=>{
-
-        html +=
-`${index+1}. ${item}<br>`;
-
+import { useState, useEffect, useRef } from "react";
+
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap');`;
+
+const personas = [
+  { id: "ninja", icon: "🥷", name: "Ninja", color: "#FF2D55", role: "Aggressive Sales Angle" },
+  { id: "professor", icon: "🧠", name: "Professor", color: "#00E5FF", role: "Data Analysis" },
+  { id: "skeptic", icon: "😈", name: "Skeptic", color: "#FF9500", role: "Find Weaknesses" },
+  { id: "mogul", icon: "💰", name: "Mogul", color: "#FFD700", role: "Brand Value" },
+  { id: "judge", icon: "⚖️", name: "Judge", color: "#A8FF78", role: "Final Verdict" },
+];
+
+const SYSTEM_SCOUT = `You are NinjaNursery SCOUT AI — an expert anime baby/kids product researcher for dropshipping.
+
+Your job: Find TOP 3 trending anime baby/nursery products perfect for dropshipping in 2025.
+
+For each product return EXACTLY this JSON format (no markdown, no extra text, pure JSON array):
+[
+  {
+    "rank": 1,
+    "name": "Product Name",
+    "category": "Category",
+    "emoji": "🎯",
+    "aliexpress_search": "search term for AliExpress",
+    "estimated_cost": "$X-Y",
+    "sell_price": "$X-Y",
+    "margin": "XX%",
+    "shipping_days": "X-Y days",
+    "trending_reason": "Why it's trending now",
+    "anime_theme": "Which anime",
+    "target_audience": "Who buys this",
+    "wow_factor": "The hook"
+  }
+]
+
+Focus on: Studio Ghibli, Demon Slayer, One Piece, Naruto, Jujutsu Kaisen, Pokemon, Dragon Ball themed baby/nursery items.
+Products: baby clothes, nursery decor, plushies, baby blankets, night lights, mobiles, bibs, bottle holders.
+Make sure margin is above 40%. Be specific and realistic.`;
+
+const SYSTEM_DEBATE = (product) => `You are moderating a 5-personality debate about this anime dropshipping product:
+
+PRODUCT: ${product.name} (${product.anime_theme})
+Cost: ${product.estimated_cost} | Sell: ${product.sell_price} | Margin: ${product.margin}
+Trending reason: ${product.trending_reason}
+
+Generate a sharp debate. Each personality gives 2-3 sentences. Return EXACTLY this JSON (no markdown):
+{
+  "ninja": "aggressive sales pitch, why to push this hard",
+  "professor": "data-driven analysis, market size, conversion potential",
+  "skeptic": "3 real risks or weaknesses to watch out for",
+  "mogul": "brand building angle, long-term value, upsell potential",
+  "judge": "final verdict: APPROVED/RISKY/SKIP + one-line reason"
+}`;
+
+const SYSTEM_EXECUTE = (product) => `You are NinjaNursery EXECUTE AI — a full marketing content generator.
+
+Generate complete marketing kit for this product:
+PRODUCT: ${product.name} | Anime: ${product.anime_theme} | Price: ${product.sell_price}
+Target: ${product.target_audience} | Hook: ${product.wow_factor}
+
+Return EXACTLY this JSON (no markdown, no backticks):
+{
+  "tiktok_caption": "viral TikTok caption with hashtags (under 150 chars)",
+  "tiktok_strategy": "3-step TikTok content strategy",
+  "pinterest_board_name": "Pinterest board name",
+  "pinterest_pin_title": "Pin title",
+  "seo_keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
+  "email_subjects": ["subject1", "subject2", "subject3"],
+  "influencer_dm": "short influencer outreach DM template",
+  "leonardo_prompt": "detailed Leonardo AI image generation prompt",
+  "week1_plan": ["Day 1-2: action", "Day 3-4: action", "Day 5-6: action", "Day 7: action"]
+}`;
+
+export default function NinjaNursery() {
+  const [apiKey, setApiKey] = useState("");
+  const [apiKeyInput, setApiKeyInput] = useState("");
+  const [phase, setPhase] = useState("landing"); // landing | setup | scout | debate | execute | done
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [debateData, setDebateData] = useState(null);
+  const [executeData, setExecuteData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [loadingMsg, setLoadingMsg] = useState("");
+  const [logs, setLogs] = useState([]);
+  const [approvedProducts, setApprovedProducts] = useState([]);
+  const logRef = useRef(null);
+
+  const addLog = (msg) => setLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), msg }]);
+
+  useEffect(() => {
+    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+  }, [logs]);
+
+  const callClaude = async (systemPrompt, userMsg) => {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userMsg }]
+      })
     });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    return data.content[0].text;
+  };
 
-    box.innerHTML = html;
-}
-
-function addRanking(
-    product,
-    margin,
-    trend
-){
-
-    const rankings =
-    JSON.parse(
-        localStorage.getItem("rankings") || "[]"
-    );
-
-    const score =
-    parseInt(margin) +
-    (parseInt(trend)*5);
-
-    rankings.push({
-
-        product,
-        margin,
-        trend,
-        score,
-
-        date:
-        new Date().toLocaleDateString()
-
-    });
-
-    rankings.sort((a,b)=>
-        b.score - a.score
-    );
-
-    localStorage.setItem(
-        "rankings",
-        JSON.stringify(rankings.slice(0,10))
-    );
-
-    renderRanking();
-}
-
-function renderRanking(){
-
-    const rankings =
-    JSON.parse(
-        localStorage.getItem("rankings") || "[]"
-    );
-
-    const table =
-    document.getElementById(
-        "rankingTable"
-    );
-
-    table.innerHTML = "";
-
-    rankings.forEach((item,index)=>{
-
-        table.innerHTML +=
-`
-<tr>
-<td>${index+1}</td>
-<td>${item.product}</td>
-<td>${item.margin}%</td>
-<td>${item.trend}/10</td>
-<td>${item.score}</td>
-<td>${item.date}</td>
-</tr>
-`;
-
-    });
-}
-
-function downloadPDF(){
-
-    window.print();
-}
-
-function downloadCSV(){
-
-    if(csvData.length===0){
-
-        alert("No CSV data");
-
-        return;
+  const runScout = async () => {
+    setLoading(true);
+    setLoadingMsg("🥷 SCOUT scanning trending anime products...");
+    addLog("SCOUT activated — searching AliExpress trends...");
+    try {
+      const raw = await callClaude(SYSTEM_SCOUT, "Find the top 3 trending anime baby/nursery dropshipping products right now. Focus on high margin, fast shipping.");
+      addLog("SCOUT response received — parsing products...");
+      const clean = raw.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(clean);
+      setProducts(parsed);
+      addLog(`✅ Found ${parsed.length} winning products!`);
+      setPhase("scout");
+    } catch (e) {
+      addLog(`❌ Error: ${e.message}`);
     }
+    setLoading(false);
+  };
 
-    let csv =
-    "Product,Margin,Trend,Verdict\n";
-
-    csvData.forEach(item=>{
-
-        csv +=
-`${item.product},
-${item.margin},
-${item.trend},
-${item.verdict}\n`;
-
-    });
-
-    const blob =
-    new Blob(
-        [csv],
-        {
-            type:"text/csv"
-        }
-    );
-
-    const url =
-    URL.createObjectURL(blob);
-
-    const a =
-    document.createElement("a");
-
-    a.href = url;
-
-    a.download =
-    "ninja_products.csv";
-
-    a.click();
-
-    URL.revokeObjectURL(url);
-}
-
-async function runAgent(){
-
-    const brand =
-    document.getElementById("brandName").value;
-
-    const niche =
-    document.getElementById("nicheKeywords").value;
-
-    const market =
-    document.getElementById("targetMarket").value;
-
-    const margin =
-    document.getElementById("minMargin").value;
-
-    const previousProducts =
-    getMemoryProducts();
-
-    if(
-        !document.getElementById("geminiKey").value
-    ){
-        alert("Add Gemini API Key");
-        return;
+  const runDebate = async (product) => {
+    setSelectedProduct(product);
+    setLoading(true);
+    setLoadingMsg("🧠 5 AI personalities debating...");
+    addLog(`DEBATE started for: ${product.name}`);
+    try {
+      const raw = await callClaude(SYSTEM_DEBATE(product), "Start the debate now. Each persona speaks.");
+      const clean = raw.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(clean);
+      setDebateData(parsed);
+      addLog("✅ Debate complete — Judge has spoken!");
+      setPhase("debate");
+    } catch (e) {
+      addLog(`❌ Error: ${e.message}`);
     }
+    setLoading(false);
+  };
 
-    log("🚀 Agent Started","green");
-
-    document.getElementById(
-        "scoutStatus"
-    ).innerHTML =
-    "Running...";
-
-    const scoutResult =
-    await callGemini(
-
-`
-You are Viral Trend Detector.
-
-Find top 3 NEW trending anime baby products.
-
-DO NOT repeat these products:
-${previousProducts.join(", ")}
-
-For each product give:
-
-- Product name
-- Margin %
-- Trend score
-- Viral reason
-- Top 3 cheapest AliExpress supplier categories
-- Estimated cost price
-- USA shipping time
-- Quality rating
-- Recommended supplier type
-
-Aggressive FOMO style.
-`,
-
-`
-Brand:
-${brand}
-
-Niche:
-${niche}
-
-Market:
-${market}
-
-Minimum Margin:
-${margin}
-`
-    );
-
-    log("SCOUT completed","green");
-
-    document.getElementById(
-        "scoutStatus"
-    ).innerHTML =
-    "✅ Completed";
-
-    document.getElementById(
-        "debateStatus"
-    ).innerHTML =
-    "Running...";
-
-    const personalities = [
-
-        {
-            name:"🥷 NINJA",
-            style:"Aggressive"
-        },
-
-        {
-            name:"🧠 PROFESSOR",
-            style:"Data driven"
-        },
-
-        {
-            name:"😈 SKEPTIC",
-            style:"Find weakness"
-        },
-
-        {
-            name:"💰 MOGUL",
-            style:"Brand thinking"
-        },
-
-        {
-            name:"⚖️ JUDGE",
-            style:"Final verdict"
-        }
-
-    ];
-
-    let debateText = "";
-
-    for(const p of personalities){
-
-        log(`${p.name} debating...`);
-
-        const result =
-        await callGemini(
-
-`
-You are ${p.name}
-
-Style:
-${p.style}
-`,
-
-scoutResult
-
-        );
-
-        debateText += `
-
-${p.name}
-
-${result}
-
-`;
-
+  const runExecute = async () => {
+    setLoading(true);
+    setLoadingMsg("⚡ EXECUTE generating full marketing kit...");
+    addLog(`EXECUTE building marketing for: ${selectedProduct.name}`);
+    try {
+      const raw = await callClaude(SYSTEM_EXECUTE(selectedProduct), "Generate the complete marketing kit.");
+      const clean = raw.replace(/```json|```/g, "").trim();
+      const parsed = JSON.parse(clean);
+      setExecuteData(parsed);
+      addLog("✅ Full marketing kit ready!");
+      setPhase("execute");
+    } catch (e) {
+      addLog(`❌ Error: ${e.message}`);
     }
+    setLoading(false);
+  };
 
-    document.getElementById(
-        "debateStatus"
-    ).innerHTML =
-    "✅ Completed";
+  const approveProduct = () => {
+    setApprovedProducts(prev => [...prev, { ...selectedProduct, marketing: executeData }]);
+    addLog(`🎉 ${selectedProduct.name} APPROVED for Shopify!`);
+    setPhase("done");
+  };
 
-    log("DEBATE completed","green");
+  const reset = () => {
+    setPhase("scout");
+    setSelectedProduct(null);
+    setDebateData(null);
+    setExecuteData(null);
+  };
 
-    document.getElementById(
-        "executeStatus"
-    ).innerHTML =
-    "Running...";
+  const styles = {
+    app: {
+      fontFamily: "'Noto Sans JP', sans-serif",
+      background: "#050508",
+      minHeight: "100vh",
+      color: "#e0e0e0",
+      position: "relative",
+      overflow: "hidden",
+    },
+    grid: {
+      position: "fixed", inset: 0, zIndex: 0,
+      backgroundImage: "linear-gradient(rgba(255,45,85,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,45,85,0.07) 1px, transparent 1px)",
+      backgroundSize: "40px 40px",
+      pointerEvents: "none",
+    },
+    glow: {
+      position: "fixed", top: "-200px", left: "50%", transform: "translateX(-50%)",
+      width: "600px", height: "400px", borderRadius: "50%",
+      background: "radial-gradient(ellipse, rgba(255,45,85,0.15) 0%, transparent 70%)",
+      pointerEvents: "none", zIndex: 0,
+    },
+    container: { position: "relative", zIndex: 1, maxWidth: "900px", margin: "0 auto", padding: "20px" },
+    header: {
+      textAlign: "center", padding: "30px 0 20px",
+      borderBottom: "1px solid rgba(255,45,85,0.3)",
+      marginBottom: "30px",
+    },
+    logo: {
+      fontFamily: "'Orbitron', monospace",
+      fontSize: "clamp(1.8rem, 5vw, 2.8rem)",
+      fontWeight: 900,
+      background: "linear-gradient(135deg, #FF2D55, #FF9500, #FFD700)",
+      WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+      letterSpacing: "2px", margin: 0,
+    },
+    subtitle: { color: "#FF2D55", fontSize: "0.75rem", letterSpacing: "4px", marginTop: "6px", fontFamily: "'Orbitron', monospace" },
+    card: {
+      background: "rgba(255,255,255,0.03)",
+      border: "1px solid rgba(255,45,85,0.2)",
+      borderRadius: "12px",
+      padding: "20px",
+      marginBottom: "16px",
+      backdropFilter: "blur(10px)",
+    },
+    btn: (color = "#FF2D55", disabled = false) => ({
+      background: disabled ? "#333" : `linear-gradient(135deg, ${color}, ${color}99)`,
+      border: `1px solid ${disabled ? "#444" : color}`,
+      color: disabled ? "#666" : "#fff",
+      padding: "12px 24px",
+      borderRadius: "8px",
+      cursor: disabled ? "not-allowed" : "pointer",
+      fontFamily: "'Orbitron', monospace",
+      fontSize: "0.75rem",
+      fontWeight: 700,
+      letterSpacing: "1px",
+      transition: "all 0.2s",
+      display: "inline-flex", alignItems: "center", gap: "8px",
+    }),
+    tag: (color) => ({
+      background: `${color}20`,
+      border: `1px solid ${color}50`,
+      color: color,
+      padding: "3px 10px",
+      borderRadius: "20px",
+      fontSize: "0.7rem",
+      fontFamily: "'Orbitron', monospace",
+    }),
+    input: {
+      background: "rgba(255,255,255,0.05)",
+      border: "1px solid rgba(255,45,85,0.3)",
+      borderRadius: "8px",
+      padding: "12px 16px",
+      color: "#fff",
+      fontSize: "0.9rem",
+      width: "100%",
+      boxSizing: "border-box",
+      fontFamily: "'Noto Sans JP', sans-serif",
+      outline: "none",
+    },
+    sectionTitle: {
+      fontFamily: "'Orbitron', monospace",
+      fontSize: "0.7rem",
+      letterSpacing: "3px",
+      color: "#FF2D55",
+      marginBottom: "16px",
+      display: "flex", alignItems: "center", gap: "10px",
+    },
+    loader: {
+      textAlign: "center", padding: "40px",
+    },
+    spin: {
+      display: "inline-block",
+      width: "40px", height: "40px",
+      border: "3px solid rgba(255,45,85,0.2)",
+      borderTop: "3px solid #FF2D55",
+      borderRadius: "50%",
+      animation: "spin 1s linear infinite",
+    },
+  };
 
-    const executeResult =
-    await callGemini(
+  return (
+    <>
+      <style>{`
+        ${FONTS}
+        * { box-sizing: border-box; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .ninja-card { animation: fadeIn 0.4s ease forwards; }
+        .btn-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,45,85,0.3); }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #FF2D55; border-radius: 2px; }
+      `}</style>
 
-`
-You are Marketing Strategist.
+      <div style={styles.app}>
+        <div style={styles.grid} />
+        <div style={styles.glow} />
 
-Generate:
+        <div style={styles.container}>
+          {/* Header */}
+          <div style={styles.header}>
+            <h1 style={styles.logo}>🥷 NINJANURSERY</h1>
+            <p style={styles.subtitle}>AGENT V3.0 — ANIME DROPSHIP AUTOMATION</p>
+            <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginTop: "12px", flexWrap: "wrap" }}>
+              {["SCOUT", "DEBATE", "EXECUTE"].map((l, i) => (
+                <span key={l} style={styles.tag(["#FF2D55","#00E5FF","#A8FF78"][i])}>
+                  {["Layer 1","Layer 2","Layer 3"][i]} — {l}
+                </span>
+              ))}
+            </div>
+          </div>
 
-1. Product name
-2. Margin %
-3. Trend score
-4. Judge verdict
-5. TikTok caption
-6. SEO keywords
+          {/* API Key Setup */}
+          {!apiKey && (
+            <div style={{ ...styles.card, borderColor: "rgba(255,45,85,0.5)" }} className="ninja-card">
+              <div style={styles.sectionTitle}>⚡ INITIALIZE AGENT</div>
+              <p style={{ fontSize: "0.85rem", color: "#aaa", marginBottom: "16px" }}>
+                Anthropic API key দাও — agent activate হবে। Key locally থাকবে, কোথাও store হবে না।
+              </p>
+              <input
+                style={styles.input}
+                type="password"
+                placeholder="sk-ant-api03-..."
+                value={apiKeyInput}
+                onChange={e => setApiKeyInput(e.target.value)}
+              />
+              <div style={{ marginTop: "12px" }}>
+                <button
+                  className="btn-hover"
+                  style={styles.btn("#FF2D55", !apiKeyInput.startsWith("sk-"))}
+                  onClick={() => { setApiKey(apiKeyInput); setPhase("ready"); addLog("✅ API Key activated!"); }}
+                  disabled={!apiKeyInput.startsWith("sk-")}
+                >
+                  🥷 ACTIVATE AGENT
+                </button>
+              </div>
+            </div>
+          )}
 
-7. TikTok strategy
-- Posting time
-- Hooks
-- Hashtags
+          {/* Ready State */}
+          {apiKey && phase === "ready" && (
+            <div style={{ ...styles.card, textAlign: "center", padding: "40px" }} className="ninja-card">
+              <div style={{ fontSize: "4rem", marginBottom: "16px" }}>🥷</div>
+              <h2 style={{ fontFamily: "'Orbitron', monospace", color: "#FF2D55", marginBottom: "8px" }}>AGENT READY</h2>
+              <p style={{ color: "#aaa", marginBottom: "24px", fontSize: "0.9rem" }}>
+                SCOUT → trending products খুঁজবে<br/>
+                DEBATE → 5 AI personality analyze করবে<br/>
+                EXECUTE → full marketing kit বানাবে
+              </p>
+              <button className="btn-hover" style={styles.btn()} onClick={runScout}>
+                🚀 RUN NINJANURSERY
+              </button>
+            </div>
+          )}
 
-8. Pinterest strategy
-- Board names
-- Pin schedule
+          {/* Loading */}
+          {loading && (
+            <div style={{ ...styles.card, ...styles.loader }} className="ninja-card">
+              <div style={styles.spin} />
+              <p style={{ fontFamily: "'Orbitron', monospace", color: "#FF2D55", fontSize: "0.8rem", marginTop: "16px", letterSpacing: "2px" }}>
+                {loadingMsg}
+              </p>
+            </div>
+          )}
 
-9. Email subject lines (3)
+          {/* SCOUT Results */}
+          {!loading && phase === "scout" && (
+            <div className="ninja-card">
+              <div style={styles.sectionTitle}>🥷 LAYER 1 — SCOUT RESULTS</div>
+              {products.map((p, i) => (
+                <div key={i} style={{ ...styles.card, borderColor: "rgba(255,45,85,0.3)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px" }}>
+                    <div>
+                      <span style={{ fontSize: "1.5rem" }}>{p.emoji}</span>
+                      <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.9rem", color: "#fff", marginLeft: "10px" }}>
+                        #{p.rank} {p.name}
+                      </span>
+                    </div>
+                    <span style={styles.tag("#FF9500")}>{p.anime_theme}</span>
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px", margin: "12px 0", fontSize: "0.8rem" }}>
+                    {[
+                      ["Cost", p.estimated_cost, "#00E5FF"],
+                      ["Sell", p.sell_price, "#A8FF78"],
+                      ["Margin", p.margin, "#FFD700"],
+                    ].map(([label, val, color]) => (
+                      <div key={label} style={{ background: `${color}10`, border: `1px solid ${color}30`, borderRadius: "8px", padding: "10px", textAlign: "center" }}>
+                        <div style={{ color: color, fontFamily: "'Orbitron', monospace", fontSize: "0.65rem" }}>{label}</div>
+                        <div style={{ color: "#fff", fontWeight: 700, marginTop: "4px" }}>{val}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <p style={{ fontSize: "0.8rem", color: "#aaa", marginBottom: "12px" }}>🔥 {p.trending_reason}</p>
+                  <p style={{ fontSize: "0.78rem", color: "#888", marginBottom: "12px" }}>🎯 {p.wow_factor}</p>
+                  <button className="btn-hover" style={styles.btn("#00E5FF")} onClick={() => runDebate(p)}>
+                    🧠 SEND TO DEBATE
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
-10. Influencer outreach template
+          {/* DEBATE Results */}
+          {!loading && phase === "debate" && debateData && (
+            <div className="ninja-card">
+              <div style={styles.sectionTitle}>🧠 LAYER 2 — AI DEBATE</div>
+              <div style={{ ...styles.card, borderColor: "rgba(255,165,0,0.3)", marginBottom: "16px" }}>
+                <span style={{ fontFamily: "'Orbitron', monospace", fontSize: "0.8rem" }}>{selectedProduct?.emoji} {selectedProduct?.name}</span>
+              </div>
+              {personas.map(p => (
+                <div key={p.id} style={{ ...styles.card, borderColor: `${p.color}30` }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                    <span style={{ fontSize: "1.4rem" }}>{p.icon}</span>
+                    <div>
+                      <div style={{ fontFamily: "'Orbitron', monospace", color: p.color, fontSize: "0.75rem" }}>{p.name}</div>
+                      <div style={{ fontSize: "0.65rem", color: "#666" }}>{p.role}</div>
+                    </div>
+                    {p.id === "judge" && (
+                      <span style={{ ...styles.tag("#A8FF78"), marginLeft: "auto" }}>VERDICT</span>
+                    )}
+                  </div>
+                  <p style={{ fontSize: "0.85rem", color: "#ccc", lineHeight: 1.6, margin: 0 }}>
+                    {debateData[p.id]}
+                  </p>
+                </div>
+              ))}
+              <button className="btn-hover" style={styles.btn("#A8FF78")} onClick={runExecute}>
+                ⚡ EXECUTE MARKETING KIT
+              </button>
+            </div>
+          )}
 
-11. First week action plan
+          {/* EXECUTE Results */}
+          {!loading && phase === "execute" && executeData && (
+            <div className="ninja-card">
+              <div style={styles.sectionTitle}>⚡ LAYER 3 — MARKETING KIT</div>
 
-12. Product image section:
-- Unsplash search URL
-- Image description
-- Leonardo AI prompt
-`,
+              {/* TikTok */}
+              <div style={styles.card}>
+                <div style={{ ...styles.tag("#FF2D55"), display: "inline-block", marginBottom: "10px" }}>🎵 TIKTOK</div>
+                <p style={{ fontSize: "0.9rem", color: "#fff", fontWeight: 700, marginBottom: "8px" }}>{executeData.tiktok_caption}</p>
+                <p style={{ fontSize: "0.8rem", color: "#aaa" }}>{executeData.tiktok_strategy}</p>
+              </div>
 
-debateText
+              {/* Pinterest */}
+              <div style={styles.card}>
+                <div style={{ ...styles.tag("#E60023"), display: "inline-block", marginBottom: "10px" }}>📌 PINTEREST</div>
+                <p style={{ fontSize: "0.85rem", color: "#fff" }}>Board: <strong>{executeData.pinterest_board_name}</strong></p>
+                <p style={{ fontSize: "0.85rem", color: "#aaa" }}>Pin: {executeData.pinterest_pin_title}</p>
+              </div>
 
-    );
+              {/* SEO */}
+              <div style={styles.card}>
+                <div style={{ ...styles.tag("#00E5FF"), display: "inline-block", marginBottom: "10px" }}>🔍 SEO KEYWORDS</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                  {executeData.seo_keywords?.map((k, i) => (
+                    <span key={i} style={{ background: "rgba(0,229,255,0.1)", border: "1px solid rgba(0,229,255,0.3)", borderRadius: "20px", padding: "4px 12px", fontSize: "0.75rem", color: "#00E5FF" }}>{k}</span>
+                  ))}
+                </div>
+              </div>
 
-    document.getElementById(
-        "executeStatus"
-    ).innerHTML =
-    "✅ Completed";
+              {/* Email */}
+              <div style={styles.card}>
+                <div style={{ ...styles.tag("#FFD700"), display: "inline-block", marginBottom: "10px" }}>📧 EMAIL SUBJECTS</div>
+                {executeData.email_subjects?.map((s, i) => (
+                  <p key={i} style={{ fontSize: "0.82rem", color: "#ddd", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                    {i + 1}. {s}
+                  </p>
+                ))}
+              </div>
 
-    log("EXECUTE completed","green");
+              {/* Influencer DM */}
+              <div style={styles.card}>
+                <div style={{ ...styles.tag("#FF9500"), display: "inline-block", marginBottom: "10px" }}>💬 INFLUENCER DM</div>
+                <p style={{ fontSize: "0.82rem", color: "#ccc", lineHeight: 1.6 }}>{executeData.influencer_dm}</p>
+              </div>
 
-    const product =
-    "DBZ Baby Blanket";
+              {/* Leonardo Prompt */}
+              <div style={styles.card}>
+                <div style={{ ...styles.tag("#A8FF78"), display: "inline-block", marginBottom: "10px" }}>🎨 LEONARDO AI PROMPT</div>
+                <p style={{ fontSize: "0.8rem", color: "#aaa", fontStyle: "italic", lineHeight: 1.6 }}>{executeData.leonardo_prompt}</p>
+              </div>
 
-    const finalOutput =
-`
-📦 Product Name
-DBZ Baby Blanket
+              {/* Week 1 Plan */}
+              <div style={styles.card}>
+                <div style={{ ...styles.tag("#FF2D55"), display: "inline-block", marginBottom: "10px" }}>📅 WEEK 1 ACTION PLAN</div>
+                {executeData.week1_plan?.map((day, i) => (
+                  <div key={i} style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.05)", fontSize: "0.82rem" }}>
+                    <span style={{ color: "#FF2D55", fontFamily: "'Orbitron', monospace", minWidth: "20px" }}>{i + 1}</span>
+                    <span style={{ color: "#ccc" }}>{day}</span>
+                  </div>
+                ))}
+              </div>
 
-💰 Margin %
-72%
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                <button className="btn-hover" style={styles.btn("#A8FF78")} onClick={approveProduct}>
+                  ✅ APPROVE FOR SHOPIFY
+                </button>
+                <button className="btn-hover" style={styles.btn("#666")} onClick={reset}>
+                  🔄 TRY ANOTHER PRODUCT
+                </button>
+              </div>
+            </div>
+          )}
 
-🔥 Trend Score
-9/10
+          {/* DONE */}
+          {phase === "done" && (
+            <div style={{ ...styles.card, textAlign: "center", padding: "40px", borderColor: "rgba(168,255,120,0.4)" }} className="ninja-card">
+              <div style={{ fontSize: "3rem", marginBottom: "16px" }}>🎉</div>
+              <h2 style={{ fontFamily: "'Orbitron', monospace", color: "#A8FF78", marginBottom: "8px" }}>PRODUCT APPROVED!</h2>
+              <p style={{ color: "#aaa", marginBottom: "8px" }}>{approvedProducts[approvedProducts.length - 1]?.name}</p>
+              <p style={{ color: "#666", fontSize: "0.8rem", marginBottom: "24px" }}>
+                Total approved: {approvedProducts.length} product{approvedProducts.length > 1 ? "s" : ""}
+              </p>
+              <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+                <button className="btn-hover" style={styles.btn("#FF2D55")} onClick={() => { setPhase("ready"); runScout(); }}>
+                  🥷 FIND MORE PRODUCTS
+                </button>
+                <button className="btn-hover" style={styles.btn("#00E5FF")} onClick={() => setPhase("scout")}>
+                  📋 BACK TO RESULTS
+                </button>
+              </div>
+            </div>
+          )}
 
-✅ JUDGE Verdict
-APPROVED
+          {/* Logs */}
+          {logs.length > 0 && (
+            <div style={{ ...styles.card, marginTop: "20px" }}>
+              <div style={styles.sectionTitle}>📡 AGENT LOGS</div>
+              <div ref={logRef} style={{ maxHeight: "120px", overflowY: "auto", fontSize: "0.75rem", fontFamily: "monospace" }}>
+                {logs.map((l, i) => (
+                  <div key={i} style={{ color: "#666", padding: "2px 0" }}>
+                    <span style={{ color: "#FF2D55" }}>[{l.time}]</span> {l.msg}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-📝 TikTok Caption
-Anime parents are obsessed with this 😭🔥
-
-🔎 SEO Keywords
-anime baby blanket,
-dragon ball nursery,
-kawaii anime nursery
-
-📦 Cheapest Supplier
-AliExpress Anime Textile Supplier
-
-🚚 USA Shipping
-7-12 Days
-
-⭐ Quality Rating
-4.8/5
-
-📈 TikTok Strategy
-Post at 7PM EST
-
-📌 Pinterest Strategy
-Create "Anime Baby Nursery" board
-
-📧 Email Subject
-"Anime Parents Are Buying This Fast 👀"
-`;
-
-    const imageOutput =
-`
-🖼 Unsplash Search URL
-https://unsplash.com/s/photos/anime-baby-blanket
-
-📝 Image Description
-Soft kawaii anime themed baby blanket with pastel colors
-
-🎨 Leonardo AI Prompt
-Cute anime baby blanket, kawaii nursery aesthetic,
-soft pastel anime art, cozy baby room,
-premium ecommerce photography,
-ultra detailed product shot
-`;
-
-    document.getElementById(
-        "resultsBox"
-    ).innerText =
-    finalOutput;
-
-    document.getElementById(
-        "imageBox"
-    ).innerText =
-    imageOutput;
-
-    saveMemoryProduct(product);
-
-    addRanking(
-        product,
-        72,
-        9
-    );
-
-    csvData = [
-
-        {
-            product:"DBZ Baby Blanket",
-            margin:"72",
-            trend:"9",
-            verdict:"Approved"
-        }
-
-    ];
-
-    log("🏆 Pipeline Complete","green");
+          {/* Footer */}
+          <div style={{ textAlign: "center", padding: "20px 0", fontSize: "0.65rem", color: "#333", fontFamily: "'Orbitron', monospace", letterSpacing: "2px" }}>
+            NINJANURSERY V3.0 — POWERED BY CLAUDE AI
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
-
-loadSettings();
-
-renderMemory();
-
-renderRanking();
-
-</script>
-
-</body>
-</html>
