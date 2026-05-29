@@ -30,7 +30,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Background pattern */
 body::before {
   content: '';
   position: fixed;
@@ -43,7 +42,6 @@ body::before {
   z-index: 0;
 }
 
-/* Grid lines */
 body::after {
   content: '';
   position: fixed;
@@ -58,13 +56,7 @@ body::after {
 
 .container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 20px; }
 
-/* HEADER */
-header {
-  text-align: center;
-  padding: 40px 20px 30px;
-  position: relative;
-}
-
+header { text-align: center; padding: 40px 20px 30px; position: relative; }
 .brand-badge {
   display: inline-block;
   background: linear-gradient(135deg, var(--gold), var(--gold-dim));
@@ -87,16 +79,8 @@ header h1 {
   line-height: 1.2;
   margin-bottom: 8px;
 }
-
 header h1 span { color: var(--gold); }
-
-header p {
-  color: var(--text-muted);
-  font-size: 14px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
+header p { color: var(--text-muted); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
 .gold-line {
   width: 120px;
   height: 1px;
@@ -104,7 +88,25 @@ header p {
   margin: 20px auto;
 }
 
-/* TABS */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(212,175,55,0.1);
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.status-indicator { display: flex; align-items: center; gap: 8px; font-weight: 600; font-family: 'Cinzel Decorative', serif; letter-spacing: 1px; }
+.status-dot-main { width: 10px; height: 10px; border-radius: 50%; background: #7a9ab5; }
+.status-dot-main.ready { background: var(--blue); }
+.status-dot-main.running { background: var(--gold); animation: pulse 1s infinite; }
+.status-dot-main.done { background: var(--success); }
+
 .tabs {
   display: flex;
   gap: 4px;
@@ -115,10 +117,9 @@ header p {
   margin-bottom: 24px;
   overflow-x: auto;
 }
-
 .tab-btn {
   flex: 1;
-  min-width: 90px;
+  min-width: 95px;
   padding: 10px 14px;
   background: transparent;
   border: none;
@@ -133,7 +134,6 @@ header p {
   transition: all 0.3s;
   white-space: nowrap;
 }
-
 .tab-btn:hover { color: var(--cream); background: rgba(255,255,255,0.05); }
 .tab-btn.active { background: var(--gold); color: var(--navy); font-weight: 700; }
 
@@ -142,96 +142,6 @@ header p {
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* SETTINGS PANEL */
-.settings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-.input-group label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-.input-group input, .input-group textarea, .input-group select {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(212,175,55,0.2);
-  border-radius: 6px;
-  padding: 12px 16px;
-  color: var(--cream);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  transition: border-color 0.3s;
-  outline: none;
-}
-.input-group textarea { min-height: 80px; resize: vertical; }
-.input-group input:focus, .input-group textarea:focus, .input-group select:focus { border-color: var(--gold); background: rgba(212,175,55,0.05); }
-
-/* BUTTONS */
-.btn {
-  padding: 12px 28px;
-  border: none;
-  border-radius: 6px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-dim)); color: var(--navy); }
-.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
-.btn-gold:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.btn-outline { background: transparent; border: 1px solid rgba(212,175,55,0.4); color: var(--gold); }
-.btn-outline:hover { background: rgba(212,175,55,0.1); }
-.btn-sm { padding: 8px 16px; font-size: 11px; }
-
-/* CARD */
-.card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(212,175,55,0.12);
-  border-radius: 10px;
-  padding: 24px;
-  margin-bottom: 16px;
-  transition: border-color 0.3s;
-}
-.card:hover { border-color: rgba(212,175,55,0.25); }
-.card-title {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 13px;
-  color: var(--gold);
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-/* BRAND DNA PALETTE */
-.color-swatches { display: flex; gap: 12px; margin: 12px 0; }
-.swatch { flex: 1; height: 50px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); }
-
-/* FINANCE GRID */
-.finance-calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-@media (max-width: 768px) { .finance-calc-grid { grid-template-columns: 1fr; } }
-.fin-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
-.fin-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(212,175,55,0.1); border-radius: 6px; padding: 12px; text-align: center; }
-.fin-val { font-size: 20px; font-weight: 700; color: var(--gold); margin-top: 4px; }
-
-/* PIPELINE */
 .pipeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
 @media (max-width: 768px) { .pipeline { grid-template-columns: 1fr; } }
 .layer-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.12); border-radius: 10px; padding: 20px; text-align: center; position: relative; overflow: hidden; }
@@ -244,27 +154,50 @@ header p {
 .layer-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
 .layer-status { font-size: 12px; color: var(--text-muted); }
 
-/* AGENT STEPS */
+.progress-bar-wrap { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-bottom: 24px; overflow: hidden; }
+.progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--blue), var(--gold)); transition: width 0.4s ease; }
+
+.run-section { text-align: center; padding: 10px; display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; }
+.run-btn { padding: 16px 40px; background: linear-gradient(135deg, var(--gold), var(--gold-dim)); border: none; border-radius: 8px; font-family: 'Cinzel Decorative', serif; font-size: 14px; font-weight: 700; color: var(--navy); cursor: pointer; letter-spacing: 2px; transition: all 0.3s; }
+.run-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
+.run-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.card { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.12); border-radius: 10px; padding: 24px; margin-bottom: 16px; transition: border-color 0.3s; }
+.card:hover { border-color: rgba(212,175,55,0.25); }
+.card-title { font-family: 'Cinzel Decorative', serif; font-size: 13px; color: var(--gold); letter-spacing: 2px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+
 .agent-list { display: flex; flex-direction: column; gap: 8px; }
 .agent-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; }
 .agent-item.running { border-color: rgba(212,175,55,0.4); background: rgba(212,175,55,0.05); }
 .agent-item.done { border-color: rgba(46,204,113,0.3); background: rgba(46,204,113,0.04); }
 .agent-icon { font-size: 16px; width: 24px; text-align: center; }
-.agent-name { flex: 1; font-size: 13px; font-weight: 500; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.agent-name { font-size: 13px; font-weight: 600; color: var(--cream); }
+.agent-role { font-size: 11px; color: var(--text-muted); }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); margin-left: auto; }
 .agent-item.running .status-dot { background: var(--gold); animation: pulse 1s infinite; }
 .agent-item.done .status-dot { background: var(--success); }
 
 @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
 
-/* SCORE DISPLAY */
+.log-container { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; height: 220px; overflow-y: auto; font-family: monospace; font-size: 12px; line-height: 1.5; }
+.log-entry { display: flex; gap: 10px; margin-bottom: 4px; }
+.log-time { color: var(--text-muted); shrink: 0; }
+.log-msg { color: var(--cream); white-space: pre-wrap; }
+.log-msg.success { color: var(--success); }
+.log-msg.error { color: var(--error); }
+.log-msg.info { color: var(--blue); }
+.log-msg.warning { color: var(--warning); }
+
+.save-status { display: flex; gap: 16px; flex-wrap: wrap; }
+.save-item { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; font-size: 12px; color: var(--text-muted); }
+.save-item.done { border-color: rgba(46,204,113,0.3); color: var(--success); }
+
 .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 12px 0; }
 @media (max-width: 600px) { .score-grid { grid-template-columns: repeat(3, 1fr); } }
 .score-item { text-align: center; padding: 12px 8px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); }
 .score-value { font-family: 'Cinzel Decorative', serif; font-size: 22px; color: var(--gold); margin-bottom: 4px; }
 .score-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
 
-/* OUTPUT SECTIONS */
 .output-section { background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 16px; }
 .output-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: rgba(212,175,55,0.06); border-bottom: 1px solid rgba(212,175,55,0.1); cursor: pointer; }
 .output-header h3 { font-family: 'Cinzel Decorative', serif; font-size: 12px; color: var(--gold); letter-spacing: 2px; }
@@ -272,46 +205,55 @@ header p {
 .output-body.open { display: block; }
 .output-text { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; padding: 16px; font-size: 13px; line-height: 1.7; color: var(--cream); white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
 
-/* IMAGE DISPLAY */
-.image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
-@media (max-width: 600px) { .image-grid { grid-template-columns: 1fr; } }
-.image-card { border-radius: 8px; overflow: hidden; border: 1px solid rgba(212,175,55,0.2); background: rgba(0,0,0,0.3); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; position: relative; }
-.image-card img { width: 100%; height: 100%; object-fit: cover; }
-.image-card .img-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(10,31,46,0.9); font-size: 10px; text-align: center; padding: 6px; color: var(--gold); }
-
-.log-container { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; height: 180px; overflow-y: auto; font-size: 12px; }
-.log-entry { display: flex; gap: 10px; margin-bottom: 4px; }
-.log-time { color: var(--text-muted); }
-.log-msg.success { color: var(--success); }
-.log-msg.error { color: var(--error); }
-.log-msg.info { color: var(--blue); }
-
-.run-section { text-align: center; padding: 20px 20px; display: flex; justify-content: center; gap: 12px; }
-.run-btn { padding: 16px 40px; background: linear-gradient(135deg, var(--gold), var(--gold-dim)); border: none; border-radius: 8px; font-family: 'Cinzel Decorative', serif; font-size: 14px; font-weight: 700; color: var(--navy); cursor: pointer; letter-spacing: 2px; transition: all 0.3s; }
-.run-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
-
-/* TABLE STYLE */
-.history-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
-.history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(212,175,55,0.1); }
-.history-table th { color: var(--gold); text-transform: uppercase; font-size: 11px; }
-
-.notification { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 1000; transform: translateX(200%); transition: transform 0.3s; }
-.notification.show { transform: translateX(0); }
-.notification.success { background: rgba(46,204,113,0.15); border: 1px solid rgba(46,204,113,0.4); color: #2ecc71; }
-.notification.error { background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.4); color: #e74c3c; }
-
 .platform-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 .platform-tab { padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid rgba(212,175,55,0.2); color: var(--text-muted); background: transparent; }
 .platform-tab.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
 .platform-content { display: none; }
 .platform-content.active { display: block; }
 
+.image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+@media (max-width: 600px) { .image-grid { grid-template-columns: 1fr; } }
+.image-card { border-radius: 8px; overflow: hidden; border: 1px solid rgba(212,175,55,0.2); background: rgba(0,0,0,0.3); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+.image-card img { width: 100%; height: 100%; object-fit: cover; }
+.image-card .img-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(10,31,46,0.9); font-size: 10px; text-align: center; padding: 6px; color: var(--gold); }
+.image-placeholder { color: var(--text-muted); font-size: 12px; }
+
+.color-swatches { display: flex; gap: 12px; margin: 12px 0; }
+.swatch { flex: 1; height: 50px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); }
+
+.finance-calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 768px) { .finance-calc-grid { grid-template-columns: 1fr; } }
+.fin-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+.fin-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(212,175,55,0.1); border-radius: 6px; padding: 12px; text-align: center; }
+.fin-val { font-size: 20px; font-weight: 700; color: var(--gold); margin-top: 4px; }
+
+.history-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+.history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(212,175,55,0.1); }
+.history-table th { color: var(--gold); text-transform: uppercase; font-size: 11px; }
+
+.settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.input-group label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+.input-group input, .input-group textarea, .input-group select {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.2); border-radius: 6px; padding: 12px 16px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; transition: all 0.3s;
+}
+.input-group input:focus, .input-group textarea:focus, .input-group select:focus { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+
+.btn { padding: 12px 28px; border: none; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-dim)); color: var(--navy); }
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.3); }
+.btn-outline { background: transparent; border: 1px solid rgba(212,175,55,0.4); color: var(--gold); }
+.btn-outline:hover { background: rgba(212,175,55,0.1); }
+.btn-sm { padding: 8px 16px; font-size: 11px; }
+
 .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
 .empty-state .empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
 
-.save-status { display: flex; gap: 16px; flex-wrap: wrap; }
-.save-item { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; font-size: 12px; color: var(--text-muted); }
-.save-item.done { border-color: rgba(46,204,113,0.3); color: var(--success); }
+.notification { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; z-index: 1000; transform: translateX(200%); transition: transform 0.3s; }
+.notification.show { transform: translateX(0); }
+.notification.success { background: rgba(46,204,113,0.15); border: 1px solid rgba(46,204,113,0.4); color: #2ecc71; }
+.notification.error { background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.4); color: #e74c3c; }
+.notification.info { background: rgba(74,144,217,0.15); border: 1px solid rgba(74,144,217,0.4); color: #4A90D9; }
 
 footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 11px; border-top: 1px solid rgba(212,175,55,0.08); margin-top: 40px; }
 footer span { color: var(--gold); }
@@ -328,6 +270,15 @@ footer span { color: var(--gold); }
     <p>Anime Emotion → Real Sales Machine</p>
   </header>
 
+  <div class="status-bar">
+    <div class="status-indicator">
+      <div class="status-dot-main ready" id="mainStatusDot"></div>
+      <span id="mainStatusText">SYSTEM ACTIVE</span>
+    </div>
+    <div class="call-counter">API Pipelines Loaded: <span id="callCount" style="color:var(--gold)">Ready</span></div>
+    <div style="font-size:11px; color:var(--text-muted)" id="lastRunTime">Awaiting Command...</div>
+  </div>
+
   <div class="tabs">
     <button class="tab-btn active" id="btn-dashboard" onclick="switchTab('dashboard')">⚡ Dashboard</button>
     <button class="tab-btn" id="btn-brand-dna" onclick="switchTab('brand-dna')">🎯 Brand DNA</button>
@@ -343,30 +294,21 @@ footer span { color: var(--gold); }
   </div>
 
   <div id="tab-dashboard" class="tab-content active">
-    <div class="status-bar">
-      <div class="status-indicator">
-        <div class="status-dot-main" id="mainStatusDot"></div>
-        <span id="mainStatusText" style="color:var(--text-muted)">READY TO RUN</span>
-      </div>
-      <div class="call-counter">API Calls: <span id="callCount" style="color:var(--gold)">0</span>/12</div>
-      <div style="font-size:11px; color:var(--text-muted)" id="lastRunTime">Never run</div>
-    </div>
-
     <div class="pipeline">
       <div class="layer-card" id="layer1Card">
         <div class="layer-number">01</div>
-        <div class="layer-title">Scout</div>
-        <div class="layer-status" id="layer1Status">Trend · Profit · Risk</div>
+        <div class="layer-title">Scout Layer</div>
+        <div class="layer-status" id="layer1Status">Trend · Profit · Risk Screening</div>
       </div>
       <div class="layer-card" id="layer2Card">
         <div class="layer-number">02</div>
-        <div class="layer-title">Debate</div>
-        <div class="layer-status" id="layer2Status">5 AI · JS Voting</div>
+        <div class="layer-title">Debate Layer</div>
+        <div class="layer-status" id="layer2Status">5 AI Matrix Vote Panel</div>
       </div>
       <div class="layer-card" id="layer3Card">
         <div class="layer-number">03</div>
-        <div class="layer-title">Execute</div>
-        <div class="layer-status" id="layer3Status">Copy · Design · Save</div>
+        <div class="layer-title">Execute Layer</div>
+        <div class="layer-status" id="layer3Status">Omnichannel Creative Blast</div>
       </div>
     </div>
 
@@ -378,468 +320,73 @@ footer span { color: var(--gold); }
     </div>
 
     <div class="card">
-      <div class="card-title">🧠 Agent Pipeline</div>
+      <div class="card-title">🧠 Core Network Sub-Agents</div>
       <div class="agent-list" id="agentList">
-        <div class="agent-item" id="step-scout-trend"><div class="agent-icon">🔍</div><div style="flex:1"><div class="agent-name">Gemini 2.5 Flash</div><div class="agent-role">Viral Trend Detector</div></div><div class="status-dot"></div></div>
-        <div class="agent-item" id="step-scout-profit"><div class="agent-icon">💰</div><div style="flex:1"><div class="agent-name">DeepSeek R1</div><div class="agent-role">Profit Math Expert</div></div><div class="status-dot"></div></div>
-        <div class="agent-item" id="step-scout-risk"><div class="agent-icon">🛡</div><div style="flex:1"><div class="agent-name">Mistral 7B</div><div class="agent-role">Risk Screener</div></div><div class="status-dot"></div></div>
-        <div class="agent-item" id="step-debate"><div class="agent-icon">⚔</div><div style="flex:1"><div class="agent-name">5 AI Debate Round</div><div class="agent-role">Gemini · DeepSeek · Llama · Qwen · Mistral</div></div><div class="status-dot"></div></div>
+        <div class="agent-item" id="step-scout-trend"><div class="agent-icon">🔍</div><div><div class="agent-name">Gemini 2.5 Flash</div><div class="agent-role">Viral Subculture Trend Hunter</div></div><div class="status-dot"></div></div>
+        <div class="agent-item" id="step-scout-profit"><div class="agent-icon">💸</div><div><div class="agent-name">DeepSeek R1</div><div class="agent-role">E-com Mathematical Profit Assessor</div></div><div class="status-dot"></div></div>
+        <div class="agent-item" id="step-scout-risk"><div class="agent-icon">🛡</div><div><div class="agent-name">Mistral 7B</div><div class="agent-role">Trademark & IP Risk Safeguard</div></div><div class="status-dot"></div></div>
+        <div class="agent-item" id="step-debate"><div class="agent-icon">⚔</div><div><div class="agent-name">5-AI Strategic Debate Arena</div><div class="agent-role">Gemini · DeepSeek · Llama · Qwen · Mistral Voting Engine</div></div><div class="status-dot"></div></div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">📡 Live Log</div>
-      <div class="log-container" id="logContainer">
-        <div class="log-entry"><span class="log-time">--:--</span><span class="log-msg info">NinjaNursery™ Agent OS ready. Configure Key/Keyword and run.</span></div>
-      </div>
+      <div class="card-title">📡 Live Operational Log Stream</div>
+      <div class="log-container" id="logContainer"></div>
     </div>
 
     <div class="card">
-      <div class="card-title">📤 Auto Save Status</div>
+      <div class="card-title">📤 Live Sync Pipeline Handshakes</div>
       <div class="save-status">
-        <div class="save-item" id="saveSheets"><span class="save-icon">📊</span><span>Google Sheets</span></div>
-        <div class="save-item" id="saveTelegram"><span class="save-icon">📱</span><span>Telegram</span></div>
+        <div class="save-item" id="saveSheets"><span class="save-icon">📊</span><span>Google Sheets Sync</span></div>
+        <div class="save-item" id="saveTelegram"><span class="save-icon">📱</span><span>Telegram Bot Engine</span></div>
       </div>
     </div>
   </div>
 
   <div id="tab-brand-dna" class="tab-content">
     <div class="card">
-      <div class="card-title">🎯 Brand DNA Architecture</div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-        <div><p><strong>Brand Name:</strong> NinjaNursery™</p><p style="margin-top:8px;"><strong>Niche:</strong> Anime Inspired Premium E-commerce & Emotion Products</p></div>
-        <div><p><strong>Market Focus:</strong> Gen-Z Otaku Culture & High Ticket Collectors</p><p style="margin-top:8px;"><strong>Tone:</strong> Mysterious, Legendary, High-Vibe, Unapologetic</p></div>
-      </div>
-      <div style="margin-top:20px;">
-        <label style="font-size:11px; color:var(--gold); font-weight:bold; letter-spacing:1px;">COLOR PALETTE</label>
-        <div class="color-swatches">
-          <div class="swatch" style="background:#0A1F2E; color:#F5F0E8;">Navy (#0A1F2E)</div>
-          <div class="swatch" style="background:#D4AF37; color:#0A1F2E;">Gold (#D4AF37)</div>
-          <div class="swatch" style="background:#F5F0E8; color:#0A1F2E;">Cream (#F5F0E8)</div>
+      <div class="card-title">🎯 Brand DNA Blueprint</div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:20px;">
+        <div>
+          <p style="margin-bottom:8px;"><strong>Brand Name:</strong> NinjaNursery™</p>
+          <p style="margin-bottom:8px;"><strong>Niche Focus:</strong> Premium Otaku & Anime-Inspired High-Vibe Artifacts</p>
+          <p><strong>Target Market:</strong> Alpha/Gen-Z Collectors & High Ticket Setup Enthusiasts</p>
+        </div>
+        <div>
+          <p style="margin-bottom:8px;"><strong>Brand Voice:</strong> Cinematic, Mystic, Unapologetic, Identity-Driven</p>
+          <p><strong>Core Mission:</strong> Transforming emotional subculture attachment into luxury physical statements.</p>
         </div>
       </div>
-      <div style="margin-top:16px;">
-        <p><strong>Brand Voice Guide:</strong> Never speak like standard retailers. Use epic story narratives, active cinematic pacing, and strong emotional triggers based on identity and legacy.</p>
+      <div style="margin-top:24px;">
+        <label style="font-size:11px; color:var(--gold); font-weight:700; letter-spacing:1px; text-transform:uppercase;">Luxury Visual Swatches</label>
+        <div class="color-swatches">
+          <div class="swatch" style="background:#0A1F2E; color:#F5F0E8;">Deep Navy (#0A1F2E)</div>
+          <div class="swatch" style="background:#D4AF37; color:#0A1F2E;">Imperial Gold (#D4AF37)</div>
+          <div class="swatch" style="background:#F5F0E8; color:#0A1F2E;">Sacred Cream (#F5F0E8)</div>
+        </div>
       </div>
-      <div style="margin-top:20px; border-top:1px solid rgba(212,175,55,0.1); padding-top:16px;">
+      <div style="margin-top:20px; border-top:1px solid rgba(212,175,55,0.1); padding-top:20px;">
         <button class="btn btn-gold btn-sm" onclick="generateBrandDNA()">Generate Positioning Statement</button>
-        <div class="output-text" id="dnaOutput" style="margin-top:12px;">Click Generate to build the Positioning Statement via AI...</div>
+        <div class="output-text" id="dnaOutput" style="margin-top:12px;">Trigger AI engine to forge the Brand Positioning Matrix...</div>
       </div>
     </div>
   </div>
 
   <div id="tab-swot" class="tab-content">
     <div class="card">
-      <div class="card-title">📊 SWOT Matrix Analysis <button class="btn btn-gold btn-sm" onclick="runSwotAI()">Run SWOT Analysis</button></div>
-      <div class="output-text" id="swotOutput">Click "Run SWOT Analysis" to generate 5 data points per section with explanations.</div>
+      <div class="card-title">📊 Strategic Matrix Output <button class="btn btn-gold btn-sm" onclick="runSwotAI()">Run SWOT Engine</button></div>
+      <div class="output-text" id="swotOutput">Awaiting command to compile SWOT analytics vectors...</div>
     </div>
   </div>
 
   <div id="tab-results" class="tab-content">
-    <div id="resultsEmpty" class="empty-state"><div class="empty-icon">⚔</div><p>Run the agent to see product research results.</p></div>
+    <div id="resultsEmpty" class="empty-state"><div class="empty-icon">⚔</div><p>Execute NinjaNursery™ pipeline to catch data payloads.</p></div>
     <div id="resultsContent" style="display:none">
       <div class="card">
-        <div class="card-title">🏆 Winner Product Score</div>
+        <div class="card-title">🏆 Winning Product Scoring Weights</div>
         <div class="score-grid">
-          <div class="score-item"><div class="score-value" id="scoreEmotion">92</div><div class="score-label">Emotion</div></div>
-          <div class="score-item"><div class="score-value" id="scoreProfit">88</div><div class="score-label">Profit</div></div>
-          <div class="score-item"><div class="score-value" id="scoreViral">95</div><div class="score-label">Viral</div></div>
-          <div class="score-item"><div class="score-value" id="scoreIdentity">90</div><div class="score-label">Identity</div></div>
-          <div class="score-item"><div class="score-value" id="scoreFinal" style="color:var(--success)">91.2</div><div class="score-label">Final Score</div></div>
-        </div>
-      </div>
-      <div class="output-section">
-        <div class="output-header"><h3>📦 Product Details</h3></div>
-        <div class="output-body open"><div class="output-text" id="productResultsDisplay">Ninja Light-up Katana Stand Setup v2</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-copy" class="tab-content">
-    <div class="platform-tabs">
-      <button class="platform-tab active" id="tabCopyShopify" onclick="switchCopyPlatform('shopify')">🛒 Shopify Page</button>
-      <button class="platform-tab" id="tabCopyPinterest" onclick="switchCopyPlatform('pinterest')">📌 Pinterest Copy</button>
-      <button class="platform-tab" id="tabCopyEmail" onclick="switchCopyPlatform('email')">📧 Email Sequence</button>
-    </div>
-    <div id="copy-shopify" class="platform-content active"><div class="output-text" id="shopifyCopyText">Run agent to generate high converting Shopify Landers...</div></div>
-    <div id="copy-pinterest" class="platform-content"><div class="output-text" id="pinterestCopyText">Run agent to generate aesthetic high CTR Pinterest Copy...</div></div>
-    <div id="copy-email" class="platform-content"><div class="output-text" id="emailCopyText">Run agent to generate automated high engagement email sequences...</div></div>
-  </div>
-
-  <div id="tab-tiktok-ad" class="tab-content">
-    <div class="card">
-      <div class="card-title">🎵 TikTok Video Ad Core Engine</div>
-      <div class="output-section">
-        <div class="output-header"><h3>🎯 Campaign Strategy</h3></div>
-        <div class="output-body open"><div class="output-text" id="ttStrategy">Run agent to generate specialized TikTok Campaign Scaling Frameworks...</div></div>
-      </div>
-      <div class="output-section">
-        <div class="output-header"><h3>🎨 Creative Brief</h3></div>
-        <div class="output-body open"><div class="output-text" id="ttBrief">Run agent to generate Visual Hooks, Sound Triggers, and Video Angles...</div></div>
-      </div>
-      <div class="output-section">
-        <div class="output-header"><h3>👥 Audience Targeting</h3></div>
-        <div class="output-body open"><div class="output-text" id="ttTargeting">Run agent to isolate Interests, Pixel Optimizations, and Lookalike recommendations...</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-images" class="tab-content">
-    <div class="card">
-      <div class="card-title">🎨 Design Concept & Copyright-Safe Mockups</div>
-      <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">* ইমেজে কোনো ধরনের Copyright স্ট্রাইক এড়ানোর জন্য প্রোম্পটগুলোকে স্বয়ংক্রিয়ভাবে অরিজিনাল ফ্যান-স্টাইল ভেক্টর আর্ট এবং কমার্শিয়াল থ্রিডি রেন্ডার এ রূপান্তর করা হয়।</p>
-      <div class="image-grid">
-        <div class="image-card" id="imgWrap1"><div class="image-placeholder" id="imgL1">No image</div><div class="img-label">Angle 1: Hero Concept</div></div>
-        <div class="image-card" id="imgWrap2"><div class="image-placeholder" id="imgL2">No image</div><div class="img-label">Angle 2: In-Use Context</div></div>
-        <div class="image-card" id="imgWrap3"><div class="image-placeholder" id="imgL3">No image</div><div class="img-label">Angle 3: Premium Box Packing</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-finance" class="tab-content">
-    <div class="card">
-      <div class="card-title">💰 Unit Economics Manual Calculator</div>
-      <div class="finance-calc-grid">
-        <div>
-          <div class="input-grid-2" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="input-group"><label>Selling Price ($)</label><input type="number" id="finPrice" value="50" oninput="calculateFinanceMetrics()"></div>
-            <div class="input-group"><label>COGS ($)</label><input type="number" id="finCogs" value="12" oninput="calculateFinanceMetrics()"></div>
-            <div class="input-group"><label>Shipping ($)</label><input type="number" id="finShipping" value="5" oninput="calculateFinanceMetrics()"></div>
-            <div class="input-group"><label>CAC ($)</label><input type="number" id="finCac" value="15" oninput="calculateFinanceMetrics()"></div>
-            <div class="input-group"><label>Fixed Costs ($/mo)</label><input type="number" id="finFixed" value="1200" oninput="calculateFinanceMetrics()"></div>
-            <div class="input-group"><label>AOV ($)</label><input type="number" id="finAov" value="55" oninput="calculateFinanceMetrics()"></div>
-            <div class="input-group"><label>Frequency (yr)</label><input type="number" id="finFreq" value="1.5" oninput="calculateFinanceMetrics()"></div>
-            <div class="input-group"><label>Lifespan (yrs)</label><input type="number" id="finLifespan" value="2" oninput="calculateFinanceMetrics()"></div>
-          </div>
-        </div>
-        <div>
-          <label style="font-size:11px; color:var(--gold); font-weight:bold; letter-spacing:1px; display:block; margin-bottom:12px;">AUTO UPDATING METRICS</label>
-          <div class="fin-metrics">
-            <div class="fin-card"><div>Net Profit</div><div class="fin-val" id="mNetProfit">$0.00</div></div>
-            <div class="fin-card"><div>Margin %</div><div class="fin-val" id="mMargin">0%</div></div>
-            <div class="fin-card"><div>BEP Units</div><div class="fin-val" id="mBep">0</div></div>
-            <div class="fin-card"><div>ROI %</div><div class="fin-val" id="mRoi">0%</div></div>
-            <div class="fin-card"><div>LTV</div><div class="fin-val" id="mLtv">$0.00</div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-growth" class="tab-content">
-    <div class="card">
-      <div class="card-title">📈 Omnichannel Growth Playbook <button class="btn btn-gold btn-sm" onclick="runGrowthAI()">Run Growth Plan</button></div>
-      <div class="output-text" id="growthOutput">Click "Run Growth Plan" to formulate the comprehensive 30/60/90 Day blueprint across TikTok, Pinterest, Shopify and Email.</div>
-    </div>
-  </div>
-
-  <div id="tab-history" class="tab-content">
-    <div class="card">
-      <div class="card-title">📅 Operation Run Logs <button class="btn btn-outline btn-sm" onclick="clearLocalHistory()">Clear History</button></div>
-      <div style="overflow-x:auto;">
-        <table class="history-table">
-          <thead><tr><th>Date</th><th>Winner Product</th><th>Score</th></tr></thead>
-          <tbody id="historyTableBody"><tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No entries yet. Runs automatically save here.</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-settings" class="tab-content">
-    <div class="card">
-      <div class="card-title">⚙ System Configurations</div>
-      <div class="settings-grid">
-        <div class="input-group"><label>API Endpoint Token</label><input type="password" id="settingToken" value="Llama-Model-Secure-Key-9921"></div>
-        <div class="input-group"><label>Seed Keyword / Niche</label><input type="text" id="settingKeyword" value="Anime Desk Mat Premium"></div>
-        <div class="input-group"><label>Google Sheet Webhook URL</label><input type="text" id="settingSheetUrl" value="https://script.google.com/macros/s/AKfycbz...example/exec" placeholder="Enter App Script Executable Webhook URL"></div>
-        <div class="input-group"><label>Telegram Token</label><input type="password" id="settingTelegramToken" value="bot7129831:fake_token_pattern"></div>
-        <div class="input-group"><label>Telegram Chat ID</label><input type="text" id="settingChatId" value="99218231"></div>
-      </div>
-      <div style="display:flex; gap:10px; margin-top:12px;">
-        <button class="btn btn-outline btn-sm" onclick="testApiKey()">🔌 Test API Key</button>
-        <button class="btn btn-gold btn-sm" onclick="testTelegram()">Test Telegram Connection</button>
-      </div>
-    </div>
-  </div>
-
-  <footer>Powered by <span>NinjaNursery™ Decision Engine OS v2.0</span></footer>
-</div>
-
-<div id="notification" class="notification">Notification message</div>
-
-<script>
-// SWITCH TABS
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-  
-  const targetTab = document.getElementById('tab-' + tabId);
-  const targetBtn = document.getElementById('btn-' + tabId);
-  if(targetTab) targetTab.classList.add('active');
-  if(targetBtn) targetBtn.classList.add('active');
-}
-
-function switchCopyPlatform(plat) {
-  document.querySelectorAll('#tab-copy .platform-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('#tab-copy .platform-tab').forEach(el => el.classList.remove('active'));
-  
-  document.getElementById('copy-' + plat).classList.add('active');
-  event.currentTarget.classList.add('active');
-}
-
-// NOTIFICATION WRAPPER
-function showNotification(msg, type='success') {
-  const n = document.getElementById('notification');
-  n.innerText = msg;
-  n.className = `notification show ${type}`;
-  setTimeout(() => { n.classList.remove('show'); }, 3000);
-}
-
-// REALTIME FINANCIAL CALCULATOR
-function calculateFinanceMetrics() {
-  const price = parseFloat(document.getElementById('finPrice').value) || 0;
-  const cogs = parseFloat(document.getElementById('finCogs').value) || 0;
-  const shipping = parseFloat(document.getElementById('finShipping').value) || 0;
-  const cac = parseFloat(document.getElementById('finCac').value) || 0;
-  const fixed = parseFloat(document.getElementById('finFixed').value) || 0;
-  const aov = parseFloat(document.getElementById('finAov').value) || 0;
-  const freq = parseFloat(document.getElementById('finFreq').value) || 0;
-  const lifespan = parseFloat(document.getElementById('finLifespan').value) || 0;
-
-  // Math
-  const totalVariable = cogs + shipping + cac;
-  const netProfit = price - totalVariable;
-  const marginPercent = price > 0 ? (netProfit / price) * 100 : 0;
-  
-  const contributionMargin = price - (cogs + shipping);
-  const bepUnits = contributionMargin > 0 ? Math.ceil(fixed / contributionMargin) : 0;
-  
-  const costBasis = cogs + shipping;
-  const roi = costBasis > 0 ? (netProfit / costBasis) * 100 : 0;
-  const ltv = aov * freq * lifespan;
-
-  // Render
-  document.getElementById('mNetProfit').innerText = `$${netProfit.toFixed(2)}`;
-  document.getElementById('mMargin').innerText = `${marginPercent.toFixed(1)}%`;
-  document.getElementById('mBep').innerText = bepUnits;
-  document.getElementById('mRoi').innerText = `${roi.toFixed(1)}%`;
-  document.getElementById('mLtv').innerText = `$${ltv.toFixed(2)}`;
-}
-
-// INITIALIZE FINANCE ON LOAD
-calculateFinanceMetrics();
-
-// LOCAL STORAGE MANAGEMENT
-function saveToLocalHistory(productName, finalScore) {
-  let logs = JSON.parse(localStorage.getItem('nn_run_history')) || [];
-  const newEntry = {
-    date: new Date().toLocaleString(),
-    product: productName,
-    score: finalScore
-  };
-  logs.unshift(newEntry);
-  if(logs.length > 20) logs = logs.slice(0, 20);
-  localStorage.setItem('nn_run_history', JSON.stringify(logs));
-  renderHistoryTable();
-}
-
-function renderHistoryTable() {
-  const logs = JSON.parse(localStorage.getItem('nn_run_history')) || [];
-  const tbody = document.getElementById('historyTableBody');
-  if(logs.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">No entries yet. Runs automatically save here.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = logs.map(l => `
-    <tr>
-      <td>${l.date}</td>
-      <td style="color:var(--gold); font-weight:500;">${l.product}</td>
-      <td><span style="color:var(--success)">${l.score}</span></td>
-    </tr>
-  `).join('');
-}
-renderHistoryTable();
-
-function clearLocalHistory() {
-  localStorage.removeItem('nn_run_history');
-  renderHistoryTable();
-  showNotification('Run History Cleared!', 'info');
-}
-
-// TEST LLAMA API KEY
-async function testApiKey() {
-  showNotification('Testing Llama API Key Connectivity...', 'info');
-  const token = document.getElementById('settingToken').value;
-  if(!token) { showNotification('Token field cannot be empty', 'error'); return; }
-  
-  // Simulation of secure llama token validator endpoint (10 tokens test)
-  setTimeout(() => {
-    showNotification('✓ Llama Endpoint OK! 10 Token Handshake Confirmed.', 'success');
-  }, 1200);
-}
-
-// TEST TELEGRAM
-async function testTelegram() {
-  const token = document.getElementById('settingTelegramToken').value.trim();
-  const chatId = document.getElementById('settingChatId').value.trim();
-  if (!token || !chatId) { showNotification('Enter Token and Chat ID first', 'error'); return; }
-  showNotification('Sending Telegram Handshake Packet...', 'info');
-  setTimeout(() => { showNotification('✓ Telegram test sent!', 'success'); }, 1000);
-}
-
-// AI GENERATORS
-function generateBrandDNA() {
-  document.getElementById('dnaOutput').innerText = "Processing Layer Data via Engine...\n\n\"For the elite collectors who live outside the ordinary, NinjaNursery™ crafts high-vibe premium relics that turn standard environments into legendary anime internal states. We don't sell objects; we sell the tangible manifestation of identity and origin stories.\"";
-  showNotification('AI Positioning Statement Generated!', 'success');
-}
-
-function runSwotAI() {
-  document.getElementById('swotOutput').innerHTML = `
-    <h3 style="color:var(--gold); margin-bottom:6px;">STRENGTHS</h3>
-    <p>1. Proprietary Design Systems: Custom framework produces non-copyright infringing visual arts. This bypasses structural brand bans entirely.</p>
-    <p>2. High Emotional Utility: Products hook deep subculture narratives for maximum organic engagement spikes.</p>
-    <p>3. Dynamic Pricing Model: High perceived value lets unit setups operate at an 80%+ margin threshold.</p>
-    <p>4. Multi-Agent Logic Verification: Five independent algorithms vote on item viability data before manufacturing.</p>
-    <p>5. Zero Ad Spend Velocity: Organic viral loop capabilities reduce early dependency on platform advertising costs.</p>
-    
-    <h3 style="color:var(--gold); margin-top:12px; margin-bottom:6px;">WEAKNESSES</h3>
-    <p>1. Supply Chain Calibration: High customized parts require tailored sourcing agents to maintain stable speed metrics.</p>
-    <p>2. Subculture Platform Fragility: Sudden updates to search algorithms require fast conceptual pivot strategies.</p>
-    <p>3. Long Tail Sourcing Intervals: Custom boxes take extra delivery cycles compared to stock alternatives.</p>
-    <p>4. Niche Audience Caps: Specialized designs risk early audience saturation if scaling is too vertical.</p>
-    <p>5. Manual Quality Inspections: Initial batches require extensive human over-verification to guarantee luxury tiers.</p>
-    
-    <h3 style="color:var(--gold); margin-top:12px; margin-bottom:6px;">OPPORTUNITIES</h3>
-    <p>1. Cross-Platform Arbitrage: Exporting localized TikTok winners instantly onto Pinterest boards capturing older buyer bases.</p>
-    <p>2. Immersive Video Formats: Deploying AI content nodes using pure stylized vectors to minimize visual replication issues.</p>
-    <p>3. Strategic License Mergers: Partnering with independent indie studios for limited edition collective releases.</p>
-    <p>4. Custom Order Gateways: Offering premium engraving configurations directly on the Shopify storefront interface.</p>
-    <p>5. Automated Webhook Ecosystems: Synchronizing core supplier databases directly with live decision logs via Sheets.</p>
-    
-    <h3 style="color:var(--gold); margin-top:12px; margin-bottom:6px;">THREATS</h3>
-    <p>1. Ad Account Shutdowns: Unexpected updates to global tracking regulations can bottleneck scale operations.</p>
-    <p>2. Aggressive Cloners: Fast copycats attempt to rip visual concepts via scraping bots within weeks.</p>
-    <p>3. Sourcing Rate Increases: Unexpected international freight adjustments can limit bottom-line scale yields.</p>
-    <p>4. Fast Trend Shifts: Subculture interest curves evolve swiftly requiring hyper-agile inventory control rules.</p>
-    <p>5. Platform Copyright Strikes: False takedown reports from competitor entities can interrupt live transaction sequences.</p>
-  `;
-  showNotification('AI SWOT Matrix Compiled!', 'success');
-}
-
-function runGrowthAI() {
-  document.getElementById('growthOutput').innerHTML = `
-    <h3 style="color:var(--gold)">🗓 30/60/90 Day Execution Matrix</h3>
-    <p><strong>Days 1-30 (Launch & Seed):</strong> Deploy 15 high-hook stylized organic video loops on TikTok. Create 5 Pinterest Boards utilizing clean v2 renders to establish an authentic premium product footprint.</p>
-    <p><strong>Days 31-60 (Scale & Optimize):</strong> Launch targeted lookalike audiences. Activate Shopify post-purchase cross-sells to pump average order value (AOV) past $55 instantly. Deploy the automated 3-part email welcome funnel.</p>
-    <p><strong>Days 61-90 (Dominate & Automate):</strong> Scale budgets on top performing ad sets by 25% daily. Build secondary tier retention loops inside your email setup to capture lifetime value milestones.</p>
-    
-    <h3 style="color:var(--gold); margin-top:12px;">📈 Multi-Platform Strategies</h3>
-    <p>• <strong>TikTok Strategy:</strong> Rely on emotional connection arcs, unboxing transitions, and high-tempo sound pairings to spark instant profile interaction.</p>
-    <p>• <strong>Pinterest Strategy:</strong> Leverage clean design concepts, neutral aesthetics, and deep lifestyle integration shots to attract premium high-ticket buyers.</p>
-    <p>• <strong>Shopify Strategy:</strong> Clean minimalist design architecture combined with single-click checkouts and bulletproof trust Badges.</p>
-    <p>• <strong>Email Strategy:</strong> Automation triggered by abandonment carts offering deep lore narratives instead of immediate discounts.</p>
-  `;
-  showNotification('Growth Plan Online!', 'success');
-}
-
-// AUTO-SAVE FUNCTION FOR GOOGLE SHEETS
-async function autoSaveToGoogleSheets(pName, pScore) {
-  const webhookUrl = document.getElementById('settingSheetUrl').value.trim();
-  const saveIndicator = document.getElementById('saveSheets');
-  
-  if(!webhookUrl || webhookUrl.includes('example/exec')) {
-    console.warn("Google Sheet Webhook not configured correctly.");
-    saveIndicator.classList.remove('done');
-    return;
-  }
-
-  try {
-    // Correct payload pattern for direct script deployment without CORS/Auth failure
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      mode: 'no-cors', // standard workaround for App Script deployment responses
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        timestamp: new Date().toISOString(),
-        product: pName,
-        score: pScore,
-        source: 'NinjaNursery Agent V2.0'
-      })
-    });
-    
-    saveIndicator.classList.add('done');
-    console.log("Successfully transmitted data packet to Google Sheets via Webhook.");
-  } catch (error) {
-    console.error("Sheet Auto-Save transmission failed: ", error);
-    saveIndicator.classList.remove('done');
-  }
-}
-
-// CORE RUN AGENT
-function startAgent() {
-  const kw = document.getElementById('settingKeyword').value || "Premium Item Setup";
-  document.getElementById('mainStatusDot').className = "status-dot-main running";
-  document.getElementById('mainStatusText').innerText = "PIPELINE PROCESSING...";
-  document.getElementById('callCount').innerText = "12";
-  
-  showNotification('Agent Core Initialized!', 'info');
-  
-  setTimeout(() => {
-    // Open results data
-    document.getElementById('resultsEmpty').style.display = 'none';
-    document.getElementById('resultsContent').style.display = 'block';
-    
-    // Fill winning product name
-    const winProduct = kw + " (Ninja Origin Edition)";
-    document.getElementById('productResultsDisplay').innerText = winProduct;
-    
-    // Fill Copy Tabs
-    document.getElementById('shopifyCopyText').innerText = `🛒 PREMIUM LANDING PAGE COPY FOR: ${winProduct}\n\n[HOOK] This isn't another desk accessory. This is the physical manifestation of your grind. Crafted in limited quantities for those who appreciate the elite Otaku design meta.\n\n[BENEFITS]\n- Copyright-Safe Original Engineering Art\n- Custom 3D Laser Etched Base Plate\n- Ambient Glow Controls (Gen-Z Aesthetic Setup Verified)`;
-    document.getElementById('pinterestCopyText').innerText = `📌 CTR BOOSTER PIN COPY\n\nTitle: The Ultimate Premium Desk Setup Doesn't Exis-- ⚔️\nDescription: Transform your workstation into a high-vibe creative sanctuary. Zero cheap knockoffs. Click for original aesthetic designs. #DeskSetup #AnimeAesthetic #Minimalist`;
-    document.getElementById('emailCopyText').innerText = `📧 AUTOMATED ABANDONMENT SEQUENCE\n\nSubject: Left your relic behind, Ninja? 🛡️\n\nBody:\nWe noticed you walked away from your ${winProduct}.\n\nIn the world of NinjaNursery™, the finest gear goes to those who strike with absolute speed. We don't overproduce, and we never compromise. Your cart is reserved for the next 40 minutes.\n\nClaim your origin story here before it returns to the shadows.`;
-    
-    // TikTok Ad Sections แยกต่างหากตามสั่ง
-    document.getElementById('ttStrategy').innerText = `🎯 TIKTOK AD STRATEGY:\n- Scale Target: Gen-Z Anime Enthusiasts & Desk Setup Aficionados\n- Budget Split: 70% TOF (Cold Interest: Crunchyroll, Mechanical Keyboards), 30% Retargeting via Custom View Time Pixels.\n- Bidding Rule: Cost-Cap optimization set exactly at 1.2x of Manual Target CAC.`;
-    document.getElementById('ttBrief').innerText = `🎨 CREATIVE BRIEF (HIGH HOOK ENTERTAINMENT):\n- Hook (0-3s): Show an ordinary desk, then drop a heavy dramatic transition sound effect cutting to the glowing custom art.\n- Body (3-12s): Macro panning shots focusing on premium texture materials. Zero voiceovers—use heavy atmospheric synth beats.\n- Call To Action (12-15s): Text overlay: "Secure the setup. link in bio."`;
-    document.getElementById('ttTargeting').innerText = `👥 DETAILED TARGETING PACKETS:\n- Interests: Shonen, Custom PC, High-end Keycaps, Aesthetic Room Vibe\n- Age bracket: 18 - 34\n- Country Geo: US, CA, UK, AU\n- Placements: TikTok Feed Only (Turn off Pangle & Partner Networks)`;
-    
-    // COPYRIGHT-SAFE IMAGES VIA POLLINATIONS
-    // To ensure 100% no copyright strikes and premium renders, prompts explicitly request "vector art, high-end commercial 3D render style, stylized gaming concept art" without using copyrighted trademarks.
-    const encodedPrompt = encodeURIComponent("premium stylized desk accessory minimalist anime clean vector art 3d render cinematic studio lightning on dark background navy gold cream color palette");
-    document.getElementById('imgWrap1').innerHTML = `<img src="https://image.pollinations.ai/prompt/${encodedPrompt}?width=500&height=500&seed=102" alt="Angle 1"><div class="img-label">Angle 1: Hero Concept</div>`;
-    document.getElementById('imgWrap2').innerHTML = `<img src="https://image.pollinations.ai/prompt/${encodedPrompt}?width=500&height=500&seed=205" alt="Angle 2"><div class="img-label">Angle 2: In-Use Context</div>`;
-    document.getElementById('imgWrap3').innerHTML = `<img src="https://image.pollinations.ai/prompt/${encodedPrompt}?width=500&height=500&seed=309" alt="Angle 3"><div class="img-label">Angle 3: Premium Box Packing</div>`;
-    
-    // Reset indicators
-    document.getElementById('mainStatusDot').className = "status-dot-main done";
-    document.getElementById('mainStatusText').innerText = "COMPLETED!";
-    document.getElementById('lastRunTime').innerText = new Date().toLocaleTimeString();
-    document.getElementById('saveTelegram').classList.add('done');
-    
-    // Local storage & Sheets Auto Trigger
-    saveToLocalHistory(winProduct, "91.2");
-    autoSaveToGoogleSheets(winProduct, "91.2");
-    
-    showNotification('Pipeline Finished & Logged Successfully!', 'success');
-  }, 1500);
-}
-
-// ⚔ RUN ALL SECTIONS SEQUENCE
-function runAllSections() {
-  showNotification('Initializing Sequence: RUN ALL...', 'info');
-  
-  // Step 1: Run Dashboard Agent
-  startAgent();
-  
-  // Step 2: Run remaining tabs content automatically
-  setTimeout(() => { generateBrandDNA(); }, 500);
-  setTimeout(() => { runSwotAI(); }, 1000);
-  setTimeout(() => { runGrowthAI(); }, 1500);
-  
-  setTimeout(() => {
-    showNotification('⚔ ALL Sections Executed and Synchronized!', 'success');
-  }, 2000);
-}
-</script>
-</body>
-</html>
+          <div class="score-item"><div class="score-value" id="scoreEmotion">0</div><div class="score-label">Emotion</div></div>
+          <div class="score-item"><div class="score-value" id="scoreProfit">0</div><div class="score-label">Profit Matrix</div></div>
+          <div class="score-item"><div class="score-value" id="scoreViral">0</div><div class="score-label">Viral Loop</div></div>
+          <div class="score-item"><div class="score-value" id="scoreIdentity">0</div><div class="score-label">Identity Core</div></div>
+          <div class="score-item">
