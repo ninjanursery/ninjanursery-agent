@@ -86,7 +86,7 @@ header p { color: var(--text-muted); font-size: 12px; letter-spacing: 2px; text-
 .status-dot-main.running { background: var(--gold); animation: pulse 1s infinite; }
 .status-dot-main.done { background: var(--success); }
 
-/* TABS NAV */
+/* TABS */
 .tabs {
   display: flex;
   gap: 4px;
@@ -119,7 +119,7 @@ header p { color: var(--text-muted); font-size: 12px; letter-spacing: 2px; text-
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-/* 2-COLUMN DASHBOARD LAYOUT (AS PER SCREENSHOT) */
+/* TWO COLUMN GRID FROM IMAGE */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
@@ -132,10 +132,10 @@ header p { color: var(--text-muted); font-size: 12px; letter-spacing: 2px; text-
 .card { background: rgba(11, 34, 51, 0.6); border: 1px solid rgba(212,175,55,0.12); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
 .card-title { font-family: 'Cinzel Decorative', serif; font-size: 12px; color: var(--gold); letter-spacing: 2px; margin-bottom: 14px; text-transform: uppercase;}
 
-/* PIPELINE STEP CARDS */
+/* TOP PIPELINE MINI INDICATORS */
 .pipeline-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-.mini-layer { background: rgba(0,0,0,0.2); border: 1px solid rgba(212,175,55,0.1); border-radius: 6px; padding: 10px; text-align: center; font-size: 11px; }
-.mini-layer.active { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+.mini-layer { background: rgba(0,0,0,0.2); border: 1px solid rgba(212,175,55,0.1); border-radius: 6px; padding: 10px; text-align: center; font-size: 11px; color: var(--text-muted); }
+.mini-layer.active { border-color: var(--gold); color: var(--gold); background: rgba(212,175,55,0.05); }
 .mini-layer.done { border-color: var(--success); color: var(--success); }
 
 .progress-bar-wrap { width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-bottom: 15px; overflow: hidden; }
@@ -165,317 +165,50 @@ header p { color: var(--text-muted); font-size: 12px; letter-spacing: 2px; text-
 .log-msg.warning { color: var(--warning); }
 .log-msg.info { color: var(--blue); }
 
-/* RIGHT PANEL SCORE GRID */
+/* RIGHT PANEL SCORES */
 .score-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 15px; }
 .score-item { text-align: center; padding: 10px 5px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); }
 .score-value { font-family: 'Cinzel Decorative', serif; font-size: 18px; color: var(--gold); }
 .score-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; margin-top: 2px;}
 
-/* OUTPUT TEXT BOXES */
+/* BOXES */
 .output-text { background: rgba(0,0,0,0.3); border: 1px solid rgba(212,175,55,0.1); border-radius: 6px; padding: 14px; font-size: 12px; line-height: 1.6; color: var(--cream); white-space: pre-wrap; max-height: 250px; overflow-y: auto; }
 
-/* PLATFORM COPY TABS */
+/* PLATFORM TABS */
 .platform-tabs { display: flex; gap: 6px; margin-bottom: 10px; margin-top: 15px; }
 .platform-tab { padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 600; cursor: pointer; border: 1px solid rgba(212,175,55,0.2); color: var(--text-muted); background: transparent; text-transform: uppercase;}
 .platform-tab.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
 .platform-content { display: none; }
 .platform-content.active { display: block; }
 
-/* SYNC PIPELINES */
+/* PIPELINES LINK STATUS */
 .save-status { display: flex; gap: 10px; margin-top: 10px; }
 .save-item { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; font-size: 11px; color: var(--text-muted); }
 .save-item.done { border-color: var(--success); color: var(--success); }
 
-/* IMAGE MOCKUPS */
+/* IMAGES */
 .image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
 .image-card { border-radius: 6px; overflow: hidden; border: 1px solid rgba(212,175,55,0.15); background: rgba(0,0,0,0.3); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; position: relative; }
 .image-card img { width: 100%; height: 100%; object-fit: cover; }
 .image-card .img-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(10,31,46,0.9); font-size: 9px; text-align: center; padding: 4px; color: var(--gold); }
 
-/* OTHER UI COMPONENTS */
 .color-swatches { display: flex; gap: 10px; margin: 10px 0; }
 .swatch { flex: 1; height: 40px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; border: 1px solid rgba(255,255,255,0.1); }
 .finance-calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .fin-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
 .fin-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(212,175,55,0.1); border-radius: 6px; padding: 10px; text-align: center; }
 .fin-val { font-size: 18px; font-weight: 700; color: var(--gold); }
+
 .history-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .history-table th, .history-table td { padding: 10px; text-align: left; border-bottom: 1px solid rgba(212,175,55,0.1); }
 .history-table th { color: var(--gold); font-size: 10px; text-transform: uppercase;}
+
 .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
 .input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
 .input-group label { font-size: 10px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 1px;}
-.input-group input, .input-group select { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.2); border-radius: 4px; padding: 10px; color: var(--cream); font-size: 12px; outline: none; }
+.input-group input { background: rgba(255,255,255,0.04); border: 1px solid rgba(212,175,55,0.2); border-radius: 4px; padding: 10px; color: var(--cream); font-size: 12px; outline: none; }
 
 .notification { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 6px; font-size: 12px; z-index: 1000; transform: translateX(200%); transition: transform 0.3s; }
 .notification.show { transform: translateX(0); }
 .notification.success { background: rgba(46,204,113,0.2); border: 1px solid var(--success); color: #2ecc71; }
-.notification.error { background: rgba(231,76,60,0.2); border: 1px solid var(--error); color: #e74c3c; }
-
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 11px; margin-top: 20px; border-top: 1px solid rgba(212,175,55,0.05); }
-footer span { color: var(--gold); }
-</style>
-</head>
-<body>
-
-<div class="container">
-  <header>
-    <div class="brand-badge">⚔ Decision Intelligence OS</div>
-    <h1>Ninja<span>Nursery</span>™</h1>
-    <p>Anime Emotion → Real Sales Machine</p>
-  </header>
-
-  <div class="status-bar">
-    <div class="status-indicator">
-      <div class="status-dot-main ready" id="mainStatusDot"></div>
-      <span id="mainStatusText">SYSTEM READY</span>
-    </div>
-    <div id="lastRunTime" style="color: var(--text-muted);">Awaiting Trigger...</div>
-  </div>
-
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('dashboard')">⚡ Dashboard</button>
-    <button class="tab-btn" onclick="switchTab('brand-dna')">🎯 Brand DNA</button>
-    <button class="tab-btn" onclick="switchTab('swot')">📊 SWOT Matrix</button>
-    <button class="tab-btn" onclick="switchTab('tiktok-ad')">🎵 TikTok Ads</button>
-    <button class="tab-btn" onclick="switchTab('finance')">💰 Economics</button>
-    <button class="tab-btn" onclick="switchTab('growth')">📈 Growth Loop</button>
-    <button class="tab-btn" onclick="switchTab('history')">📅 History Logs</button>
-    <button class="tab-btn" onclick="switchTab('settings')">⚙ Settings</button>
-  </div>
-
-  <div id="tab-dashboard" class="tab-content active">
-    <div class="dashboard-grid">
-      
-      <div>
-        <div class="card">
-          <div class="card-title">🕹 Orchestration Engine</div>
-          <div class="pipeline-mini">
-            <div class="mini-layer" id="lay1">01. Scout</div>
-            <div class="mini-layer" id="lay2">02. Debate</div>
-            <div class="mini-layer" id="lay3">03. Execute</div>
-          </div>
-          <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
-          <div class="run-section">
-            <button class="run-btn" id="runBtn" onclick="startAgentPipeline()">⚔ RUN PIPELINE</button>
-            <button class="run-all-btn" onclick="runAllSections()">⚔ RUN ALL</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">🧠 Matrix Sub-Agents</div>
-          <div class="agent-list">
-            <div class="agent-item" id="ag-gemini"><div class="agent-icon">🔍</div><div><div class="agent-name">Gemini 2.5 Flash</div><div class="agent-role">Viral Trend Hunter</div></div><div class="status-dot"></div></div>
-            <div class="agent-item" id="ag-deepseek"><div class="agent-icon">💸</div><div><div class="agent-name">DeepSeek R1</div><div class="agent-role">Mathematical Profit Assessor</div></div><div class="status-dot"></div></div>
-            <div class="agent-item" id="ag-mistral"><div class="agent-icon">🛡</div><div><div class="agent-name">Mistral 7B</div><div class="agent-role">IP & Trademark Safeguard</div></div><div class="status-dot"></div></div>
-            <div class="agent-item" id="ag-debate"><div class="agent-icon">⚔</div><div><div class="agent-name">5-AI Jury Panel</div><div class="agent-role">Consensus Voting Arena</div></div><div class="status-dot"></div></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">📡 Operational Log Stream</div>
-          <div class="log-container" id="logContainer"></div>
-          <div class="save-status">
-            <div class="save-item" id="saveSheets">📊 Sheets Webhook</div>
-            <div class="save-item" id="saveTelegram">📱 Telegram Relay</div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="card">
-          <div class="card-title">🏆 Product Synthesis Engine</div>
-          
-          <div class="score-grid">
-            <div class="score-item"><div class="score-value" id="scEmotion">0</div><div class="score-label">Emotion</div></div>
-            <div class="score-item"><div class="score-value" id="scProfit">0</div><div class="score-label">Profit</div></div>
-            <div class="score-item"><div class="score-value" id="scViral">0</div><div class="score-label">Viral Loop</div></div>
-            <div class="score-item"><div class="score-value" id="scIdentity">0</div><div class="score-label">Identity</div></div>
-            <div class="score-item" style="border-color: var(--success);"><div class="score-value" id="scFinal" style="color:var(--success)">0</div><div class="score-label">Final Score</div></div>
-          </div>
-
-          <p style="font-size: 11px; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; font-weight: bold;">AI Evaluation Summary:</p>
-          <div class="output-text" id="productSynthesisDisplay" style="margin-bottom: 15px;">Awaiting pipeline initiation to inject payload vectors...</div>
-
-          <div class="card-title" style="margin-bottom: 0;">✍ Automated Omnichannel Frameworks</div>
-          <div class="platform-tabs">
-            <button class="platform-tab active" id="pTabShopify" onclick="switchCopyPlatform('shopify')">Shopify Lander</button>
-            <button class="platform-tab" id="pTabPinterest" onclick="switchCopyPlatform('pinterest')">Pinterest Node</button>
-            <button class="platform-tab" id="pTabEmail" onclick="switchCopyPlatform('email')">Retention Flow</button>
-          </div>
-          <div id="cp-shopify" class="platform-content active"><div class="output-text" id="txtShopify">System idle...</div></div>
-          <div id="cp-pinterest" class="platform-content"><div class="output-text" id="txtPinterest">System idle...</div></div>
-          <div id="cp-email" class="platform-content"><div class="output-text" id="txtEmail">System idle...</div></div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">🖼 Concept Engineering Mockups (Anti-Copyright Vector Style)</div>
-          <div class="image-grid">
-            <div class="image-card" id="img1"><span style="color:var(--text-muted); font-size:11px;">Awaiting Run</span><div class="img-label">Hero Aesthetic</div></div>
-            <div class="image-card" id="img2"><span style="color:var(--text-muted); font-size:11px;">Awaiting Run</span><div class="img-label">Setup Environment</div></div>
-            <div class="image-card" id="img3"><span style="color:var(--text-muted); font-size:11px;">Awaiting Run</span><div class="img-label">Premium Box Deck</div></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div id="tab-brand-dna" class="tab-content">
-    <div class="card">
-      <div class="card-title">🎯 Brand DNA Blueprint</div>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; font-size:13px; line-height:1.6;">
-        <div>
-          <p><strong>Brand Identity:</strong> NinjaNursery™</p>
-          <p><strong>Niche Sector:</strong> High-Vibe Anime & Cyberpunk Desktop Artifacts</p>
-          <p><strong>Audience Core:</strong> Alpha/Gen-Z Collectors & Premium Station Setup Creators</p>
-        </div>
-        <div>
-          <p><strong>Vibe Matrix:</strong> Cinematic, Identity-Driven, Sacred Artifacts</p>
-          <p><strong>Core Objective:</strong> Turn subculture emotions into high-ticket ecommerce margins.</p>
-        </div>
-      </div>
-      <div class="color-swatches">
-        <div class="swatch" style="background:#0A1F2E; color:#F5F0E8;">Deep Navy</div>
-        <div class="swatch" style="background:#D4AF37; color:#0A1F2E;">Imperial Gold</div>
-        <div class="swatch" style="background:#F5F0E8; color:#0A1F2E;">Sacred Cream</div>
-      </div>
-      <button class="run-btn" style="padding:10px; font-size:11px;" onclick="generateBrandDNA()">Generate Positioning Script</button>
-      <div class="output-text" id="dnaOutput" style="margin-top:10px;">Forge positioning statements...</div>
-    </div>
-  </div>
-
-  <div id="tab-swot" class="tab-content">
-    <div class="card">
-      <div class="card-title">📊 Strategic Matrix Output <button class="run-all-btn" style="padding:4px 10px; font-size:10px; width:auto; display:inline-block; margin-left:10px;" onclick="runSwotAI()">Run Matrix</button></div>
-      <div class="output-text" id="swotOutput">Awaiting command to compile SWOT analytics vectors...</div>
-    </div>
-  </div>
-
-  <div id="tab-tiktok-ad" class="tab-content">
-    <div class="card">
-      <div class="card-title">🎵 Paid Video Disruption Protocol</div>
-      <p style="font-size:11px; color:var(--gold); margin-bottom:4px; font-weight:bold;">Campaign Structure Strategy:</p>
-      <div class="output-text" id="ttStrategy" style="margin-bottom:12px;">Awaiting deployment...</div>
-      <p style="font-size:11px; color:var(--gold); margin-bottom:4px; font-weight:bold;">Creative Brief & Hook Formulas:</p>
-      <div class="output-text" id="ttBrief" style="margin-bottom:12px;">Awaiting deployment...</div>
-      <p style="font-size:11px; color:var(--gold); margin-bottom:4px; font-weight:bold;">Data Pixel Targeting Nodes:</p>
-      <div class="output-text" id="ttTargeting">Awaiting deployment...</div>
-    </div>
-  </div>
-
-  <div id="tab-finance" class="tab-content">
-    <div class="card">
-      <div class="card-title">💰 Unit Economics Balancer Engine</div>
-      <div class="finance-calc-grid">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-          <div class="input-group"><label>Selling Price ($)</label><input type="number" id="finPrice" value="65" oninput="calculateFinance()"></div>
-          <div class="input-group"><label>COGS ($)</label><input type="number" id="finCogs" value="14" oninput="calculateFinance()"></div>
-          <div class="input-group"><label>Shipping Cost ($)</label><input type="number" id="finShipping" value="6.5" oninput="calculateFinance()"></div>
-          <div class="input-group"><label>Expected CAC ($)</label><input type="number" id="finCac" value="18" oninput="calculateFinance()"></div>
-        </div>
-        <div class="fin-metrics">
-          <div class="fin-card"><div>Net Profit Unit</div><div class="fin-val" id="mNetProfit">$0.00</div></div>
-          <div class="fin-card"><div>Net Margin</div><div class="fin-val" id="mMargin">0%</div></div>
-          <div class="fin-card"><div>ROI Engine</div><div class="fin-val" id="mRoi">0%</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-growth" class="tab-content">
-    <div class="card">
-      <div class="card-title">📈 Omnichannel Scaling Blueprints <button class="run-all-btn" style="padding:4px 10px; font-size:10px; width:auto; display:inline-block; margin-left:10px;" onclick="runGrowthAI()">Run Modeler</button></div>
-      <div class="output-text" id="growthOutput">Awaiting loop initialization vectors...</div>
-    </div>
-  </div>
-
-  <div id="tab-history" class="tab-content">
-    <div class="card">
-      <div class="card-title">📅 Operation Run History <button class="run-all-btn" style="padding:4px 10px; font-size:10px; width:auto; display:inline-block; margin-left:10px;" onclick="clearHistory()">Clear Data</button></div>
-      <table class="history-table">
-        <thead><tr><th>Timestamp</th><th>Target Product Engine Key</th><th>Match Weight</th></tr></thead>
-        <tbody id="historyTableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div id="tab-settings" class="tab-content">
-    <div class="card">
-      <div class="card-title">⚙ System Webhook Relays & Control Access Tokens</div>
-      <div class="settings-grid">
-        <div class="input-group"><label>Inference Secure Token</label><input type="password" value="Llama-Auth-Matrix-891"></div>
-        <div class="input-group"><label>Niche Seed / Target Keyword</label><input type="text" id="settingKeyword" value="Neon Cyberpunk Katana Stand"></div>
-        <div class="input-group"><label>Google Sheets Endpoint URL</label><input type="text" id="settingSheetUrl" placeholder="https://script.google.com/macros/s/.../exec"></div>
-        <div class="input-group"><label>Telegram API Bot Token</label><input type="password" id="settingTelegramToken" placeholder="Bot Token"></div>
-        <div class="input-group"><label>Telegram Target Chat/Channel ID</label><input type="text" id="settingChatId" placeholder="Chat ID"></div>
-      </div>
-      <div style="display:flex; gap:10px; margin-top:10px;">
-        <button class="run-all-btn" style="font-size:11px;" onclick="testApiHandshake()">🔌 Test API Connection</button>
-        <button class="run-btn" style="font-size:11px; padding:10px;" onclick="testTelegramRelay()">Test Telegram Gateway</button>
-      </div>
-    </div>
-  </div>
-
-  <footer>Powered by <span>NinjaNursery™ OS Engine v2.0</span></footer>
-</div>
-
-<div id="notification" class="notification">Alert</div>
-
-<script>
-// ============================================================
-// APP LIFECYCLE INITIALIZER
-// ============================================================
-window.onload = function() {
-  addLog("System Architecture Matrix Core activated successfully.", "info");
-  addLog("Awaiting master orchestration loop trigger.", "info");
-  calculateFinance();
-  renderHistory();
-};
-
-// MULTI-NAV CONTROLLER
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    if(btn.innerText.toLowerCase().includes(tabId.replace('-',' '))) btn.classList.add('active');
-    else btn.classList.remove('active');
-  });
-  document.getElementById('tab-' + tabId).classList.add('active');
-}
-
-function switchCopyPlatform(plat) {
-  document.querySelectorAll('#tab-dashboard .platform-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('#tab-dashboard .platform-tab').forEach(el => el.classList.remove('active'));
-  document.getElementById('cp-' + plat).classList.add('active');
-  document.getElementById('pTab' + plat.charAt(0).toUpperCase() + plat.slice(1)).classList.add('active');
-}
-
-function notify(msg, type='success') {
-  const n = document.getElementById('notification');
-  n.innerText = msg;
-  n.className = `notification show ${type}`;
-  setTimeout(() => n.classList.remove('show'), 3000);
-}
-
-// ============================================================
-// LIVE OPERATIONAL LOG PIPELINE
-// ============================================================
-function addLog(msg, type='info') {
-  const container = document.getElementById('logContainer');
-  const time = new Date().toLocaleTimeString();
-  const entry = document.createElement('div');
-  entry.className = 'log-entry';
-  entry.innerHTML = `<span class="log-time">[${time}]</span><span class="log-msg ${type}">${msg}</span>`;
-  container.appendChild(entry);
-  container.scrollTop = container.scrollHeight;
-}
-
-// ============================================================
-// FINANCIAL BALANCE CORE
-// ============================================================
-function calculateFinance() {
-  const price = parseFloat(document.getElementById('finPrice').value) || 0;
-  const cogs = parseFloat(document.getElementById('finCogs').value) || 0;
-  const shipping = parseFloat(document.getElementById('finShipping').value) || 0;
-  const cac = parseFloat(document.getElementById('finCac').value) || 0
+.notification.error { background: rgba(231,76,60,0.2); border: 1px solid var(--
